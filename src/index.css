@@ -1,0 +1,524 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #F47D11, #F4733A);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #F4733A, #F47D11);
+}
+
+/* Smooth transitions for all elements */
+* {
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Improved text rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+input[type="text"]:focus{
+  outline: none !important;
+  border: none !important;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Onest";
+  src: url("./fonts/Onest-Thin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+
+body {
+  font-family: "Onest", sans-serif;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+@keyframes tilt {
+  0%, 100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+}
+
+.animate-tilt {
+  animation: tilt 10s infinite linear;
+}
+/* Add these animations to your CSS */
+@keyframes fall {
+  0% {
+    transform: translateY(-100%) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti-slow > div {
+  opacity: 0;
+  animation: fall 3s linear infinite;
+}
+
+/* Pre-generate a few different fall animations instead of using @for */
+@keyframes fall-1 { 
+  0% { transform: translateY(-100%) rotate(45deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(405deg); opacity: 0; }
+}
+
+@keyframes fall-2 {
+  0% { transform: translateY(-100%) rotate(90deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(450deg); opacity: 0; }
+}
+
+@keyframes fall-3 {
+  0% { transform: translateY(-100%) rotate(135deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(495deg); opacity: 0; }
+}
+
+/* Premium Deal Modal Confetti Effect */
+.confetti-container {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.confetti-container::before,
+.confetti-container::after,
+.confetti-container .particle-1,
+.confetti-container .particle-2,
+.confetti-container .particle-3,
+.confetti-container .particle-4 {
+  content: '';
+  position: absolute;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* First confetti particle */
+.confetti-container::before {
+  background-color: rgba(255, 108, 108, 0.6);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  left: 25%;
+  top: -20px;
+  animation: confetti-fall-1 8s infinite;
+}
+
+/* Second confetti particle */
+.confetti-container::after {
+  background-color: rgba(255, 215, 0, 0.6);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  right: 25%;
+  top: -30px;
+  animation: confetti-fall-2 10s infinite;
+}
+
+/* Add 4 more particles with pseudo elements using CSS custom properties */
+.confetti-container {
+  --particle1-color: rgba(255, 165, 0, 0.5);
+  --particle2-color: rgba(255, 123, 172, 0.5);
+  --particle3-color: rgba(102, 204, 255, 0.5);
+  --particle4-color: rgba(153, 102, 255, 0.5);
+}
+
+.confetti-container::before {
+  box-shadow: 
+    90px -10px 0 -2px var(--particle1-color),
+    -60px -25px 0 -1px var(--particle2-color),
+    30px -15px 0 -3px var(--particle3-color),
+    -30px -30px 0 0 var(--particle4-color);
+}
+
+.confetti-container::after {
+  box-shadow: 
+    -70px -5px 0 -2px var(--particle2-color),
+    40px -20px 0 -1px var(--particle3-color),
+    -40px -15px 0 0px var(--particle4-color),
+    80px -30px 0 -1px var(--particle1-color);
+}
+
+@keyframes confetti-fall-1 {
+  0%, 100% { 
+    transform: translate3d(0, -20px, 0) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  10% { 
+    transform: translate3d(-100px, 100px, 0) rotate(180deg) scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: translate3d(-50px, 200px, 0) rotate(360deg) scale(0.8);
+    opacity: 0.8;
+  }
+  90% { 
+    transform: translate3d(100px, 500px, 0) rotate(720deg) scale(0.4);
+    opacity: 0.4;
+  }
+  99% { 
+    transform: translate3d(0, 600px, 0) rotate(800deg) scale(0.1);
+    opacity: 0;
+  }
+}
+
+@keyframes confetti-fall-2 {
+  0%, 100% { 
+    transform: translate3d(0, -30px, 0) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  15% { 
+    transform: translate3d(100px, 150px, 0) rotate(-180deg) scale(1.2);
+    opacity: 1;
+  }
+  45% { 
+    transform: translate3d(50px, 300px, 0) rotate(-360deg) scale(0.7);
+    opacity: 0.7;
+  }
+  85% { 
+    transform: translate3d(-80px, 500px, 0) rotate(-720deg) scale(0.5);
+    opacity: 0.5;
+  }
+  99% { 
+    transform: translate3d(0, 600px, 0) rotate(-800deg) scale(0.1);
+    opacity: 0;
+  }
+}
+
+/* Gold gradient shine effect for premium elements */
+.premium-gold-shine {
+  background: linear-gradient(
+    45deg,
+    #ffd700 0%,
+    #ffec8b 15%,
+    #ffd700 30%,
+    #ffec8b 45%,
+    #ffd700 60%,
+    #ffec8b 75%,
+    #ffd700 90%,
+    #ffec8b 100%
+  );
+  background-size: 200% 200%;
+  animation: gold-shimmer 3s infinite linear;
+}
+
+@keyframes gold-shimmer {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 200%;
+  }
+}
+
+/* Define the shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% -200%;
+  }
+  100% {
+    background-position: 200% 200%;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s infinite linear;
+}
+
+/* Custom Scrollbar Styling */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(236, 72, 72, 0.4) rgba(0, 0, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(236, 72, 72, 0.4);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 72, 0.6);
+}
+
+/* Global Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF6C6C;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid #FF6C6C;
+  outline-offset: 2px;
+}
+
+/* Epic Logo Animation Effects */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes logo-trail-fade {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes velocity-blur {
+  0%, 100% {
+    filter: blur(0px);
+  }
+  50% {
+    filter: blur(3px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(244, 125, 17, 0.6),
+                0 0 40px rgba(244, 125, 17, 0.4),
+                0 0 60px rgba(244, 125, 17, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(244, 125, 17, 0.8),
+                0 0 60px rgba(244, 125, 17, 0.6),
+                0 0 90px rgba(244, 125, 17, 0.4);
+  }
+}
+
+@keyframes radial-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.3;
+  }
+}
+
+@keyframes logo-float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) translateX(5px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(-5px) translateX(-5px) rotate(-2deg);
+  }
+  75% {
+    transform: translateY(-15px) translateX(5px) rotate(1deg);
+  }
+}
+
+@keyframes constellation-line {
+  0%, 100% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
+  50% {
+    stroke-dashoffset: 0;
+    opacity: 0.6;
+  }
+}
+
+@keyframes particle-orbit {
+  from {
+    transform: rotate(0deg) translateX(50px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(50px) rotate(-360deg);
+  }
+}
+
+@keyframes energy-wave {
+  0% {
+    transform: scale(0.8) translateY(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) translateY(-20px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.5) translateY(-40px);
+    opacity: 0;
+  }
+}
+
+@keyframes lens-flare {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.5) rotate(180deg);
+  }
+}
+
+.logo-moving {
+  animation: logo-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.logo-moving:hover {
+  animation-play-state: paused;
+}
+
+/* Utility classes for logo effects */
+.logo-glow-orange {
+  filter: drop-shadow(0 0 20px rgba(244, 125, 17, 0.8))
+          drop-shadow(0 0 40px rgba(244, 125, 17, 0.5));
+}
+
+.logo-glow-white {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8))
+          drop-shadow(0 0 40px rgba(244, 115, 58, 0.5));
+}
+
+/* Radial gradient support for Tailwind */
+.bg-gradient-radial {
+  background-image: radial-gradient(circle, var(--tw-gradient-stops));
+}
