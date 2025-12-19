@@ -2,6 +2,7 @@ const Images = {
   sysup360_colour: "/images/360-colour.png",
   sysup360_logo_white: "/images/360-white.png",
   hero_image: "/images/hero_image.webp",
+  logo:"/images/SysUp360-Colour.png",
   // Services section images
   call_center: "/images/call_center.webp",
   ussd_services: "/images/ussd_services.webp",

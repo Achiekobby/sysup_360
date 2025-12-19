@@ -286,17 +286,7 @@ const Hero = () => {
       >
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[85vh]">
           {/* Left Content */}
-          <div className="text-center lg:text-left space-y-8">
-            {/* Logo/Brand */}
-            <motion.div
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-[#F47D11]/10 to-[#F4733A]/10 backdrop-blur-sm px-6 py-3 rounded-full border border-[#F47D11]/20"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="w-2 h-2 bg-[#F47D11] rounded-full animate-pulse" />
-              <span className="text-[#F47D11] font-semibold text-sm tracking-wider">SysUp360</span>
-            </motion.div>
+          <div className="text-center lg:text-left space-y-8 mt-20">
 
             {/* Title */}
             <div ref={titleRef} className="space-y-2" data-reveal="tilt">
