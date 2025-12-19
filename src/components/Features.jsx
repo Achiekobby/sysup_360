@@ -161,17 +161,35 @@ const IllustratedIcon = ({ type }) => {
   return icons[type] || icons.web;
 };
 
-const SolutionsCard = ({ item, isOpen, onToggle }) => {
+const SolutionsCard = ({ item, isOpen, isInView }) => {
   return (
-    <motion.button
-      type="button"
-      onClick={onToggle}
-      className="group text-left relative overflow-hidden rounded-2xl border border-gray-800/60 bg-gray-900/30 backdrop-blur-md p-6 hover:border-[#F47D11]/40 transition-colors"
+    <motion.div
+      className="group text-left relative overflow-hidden rounded-2xl border border-gray-800/60 bg-gray-900/30 backdrop-blur-md p-6 transition-all duration-500"
       data-solution-card="true"
-      whileHover={{ y: -6 }}
-      whileTap={{ scale: 0.98 }}
+      data-card-id={item.id}
+      animate={{
+        borderColor: isInView ? 'rgba(244, 125, 17, 0.6)' : 'rgba(75, 85, 99, 0.6)',
+        scale: isInView ? 1.02 : 1,
+        y: isInView ? -8 : 0,
+      }}
+      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-[radial-gradient(circle_at_30%_20%,rgba(244,125,17,0.18),transparent_45%),radial-gradient(circle_at_80%_60%,rgba(244,115,58,0.14),transparent_45%)]" />
+      {/* Animated glow effect when in view */}
+      <motion.div
+        className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,125,17,0.18),transparent_45%),radial-gradient(circle_at_80%_60%,rgba(244,115,58,0.14),transparent_45%)]"
+        animate={{ opacity: isInView ? 1 : 0 }}
+        transition={{ duration: 0.5 }}
+      />
+      
+      {/* Pulse indicator when in view */}
+      {isInView && (
+        <motion.div
+          className="absolute top-4 right-4 w-3 h-3 rounded-full bg-[#F47D11]"
+          animate={{ scale: [1, 1.5, 1], opacity: [1, 0.7, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      )}
+
       <div className="relative">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -179,9 +197,16 @@ const SolutionsCard = ({ item, isOpen, onToggle }) => {
             <div className="mt-2 text-xl font-semibold text-white">{item.title}</div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#F47D11]/10 to-[#F4733A]/10 border border-[#F47D11]/15">
+            <motion.div
+              className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#F47D11]/10 to-[#F4733A]/10 border border-[#F47D11]/15"
+              animate={{
+                borderColor: isInView ? 'rgba(244, 125, 17, 0.4)' : 'rgba(244, 125, 17, 0.15)',
+                boxShadow: isInView ? '0 0 20px rgba(244, 125, 17, 0.3)' : 'none',
+              }}
+              transition={{ duration: 0.5 }}
+            >
               <IllustratedIcon type={item.illustrationType} />
-            </div>
+            </motion.div>
           </div>
         </div>
 
@@ -192,48 +217,70 @@ const SolutionsCard = ({ item, isOpen, onToggle }) => {
         <AnimatePresence initial={false}>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
+              initial={{ opacity: 0, height: 0, y: -20 }}
+              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -20 }}
+              transition={{ 
+                duration: 0.6, 
+                ease: [0.25, 0.1, 0.25, 1],
+                height: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+                opacity: { duration: 0.4 }
+              }}
               className="overflow-hidden"
             >
-              <div className="mt-4 pt-4 border-t border-gray-800/60 text-sm text-gray-300 leading-relaxed">
+              {/* Shimmer effect on expand */}
+              <motion.div
+                className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-transparent via-[#F47D11]/50 to-transparent"
+                initial={{ x: -10, opacity: 0 }}
+                animate={{ x: ['100%', '100%'], opacity: [0, 1, 0] }}
+                transition={{ duration: 0.8, delay: 0.2, ease: 'easeInOut' }}
+              />
+              
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+                className="mt-4 pt-4 border-t border-gray-800/60 text-sm text-gray-300 leading-relaxed"
+              >
                 {item.details}
-              </div>
+              </motion.div>
               {!!item.bullets?.length && (
-                <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {item.bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-2 text-sm text-gray-300">
+                <motion.ul
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                  className="mt-3 grid gap-2 sm:grid-cols-2"
+                >
+                  {item.bullets.map((b, idx) => (
+                    <motion.li
+                      key={b}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 + idx * 0.05, duration: 0.3 }}
+                      className="flex items-start gap-2 text-sm text-gray-300"
+                    >
                       <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#F47D11]" />
                       <span>{b}</span>
-                    </li>
+                    </motion.li>
                   ))}
-                </ul>
+                </motion.ul>
               )}
             </motion.div>
           )}
         </AnimatePresence>
-
-        <div className="mt-5 flex items-center justify-between text-xs text-gray-400">
-          <span className="inline-flex items-center gap-2">
-            <span className={`h-2 w-2 rounded-full ${isOpen ? 'bg-[#F47D11]' : 'bg-gray-700'}`} />
-            {isOpen ? 'Less details' : 'More details'}
-          </span>
-          <span className="group-hover:text-[#F47D11] transition-colors">
-            {isOpen ? '–' : '+'}
-          </span>
-        </div>
       </div>
-    </motion.button>
+    </motion.div>
   );
 };
 
 const Features = () => {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const gridRef = useRef(null);
-  const [openId, setOpenId] = useState('call-center');
+  const horizontalScrollRef = useRef(null);
+  const cardsContainerRef = useRef(null);
+  const cardRefs = useRef({});
+  const [openId, setOpenId] = useState('call-center'); // Default to first card
+  const [inViewId, setInViewId] = useState('call-center'); // Default to first card
   const [scanHeight, setScanHeight] = useState(900);
 
   const serviceMarquee = useMemo(
@@ -391,24 +438,174 @@ const Features = () => {
         );
       }
 
-      if (gridRef.current) {
-        gsap.fromTo(
-          gridRef.current.querySelectorAll('[data-animate="card"]'),
-          { opacity: 0, y: 40, scale: 0.98 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.9,
-            stagger: 0.08,
-            ease: 'power3.out',
+      // Horizontal scroll setup
+      if (horizontalScrollRef.current && cardsContainerRef.current) {
+        const cards = cardsContainerRef.current.querySelectorAll('[data-horizontal-card]');
+        if (cards.length > 0) {
+          const cardWidth = cards[0].offsetWidth;
+          const gap = 24; // gap-6 = 24px
+          const totalWidth = (cardWidth + gap) * (cards.length - 1);
+          const scrollDistance = totalWidth + cardWidth;
+
+          // Pin the horizontal scroll section
+          ScrollTrigger.create({
+            trigger: horizontalScrollRef.current,
+            start: 'top top',
+            end: () => `+=${scrollDistance}`,
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          });
+
+          // Animate horizontal scroll
+          gsap.to(cardsContainerRef.current, {
+            x: -scrollDistance,
+            ease: 'none',
             scrollTrigger: {
-              trigger: gridRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
+              trigger: horizontalScrollRef.current,
+              start: 'top top',
+              end: () => `+=${scrollDistance}`,
+              scrub: 1,
+              invalidateOnRefresh: true,
             },
-          }
-        );
+          });
+
+          // Auto-expand cards based on viewport position
+          let currentInViewId = null;
+          let currentOpenId = null;
+
+          const updateActiveCard = () => {
+            let closestCard = null;
+            let closestDistance = Infinity;
+            const currentViewportCenter = window.innerWidth / 2;
+            const viewportThreshold = window.innerWidth * 0.4; // Consider cards within 40% of viewport width from center
+
+            cards.forEach((card) => {
+              const rect = card.getBoundingClientRect();
+              const cardCenter = rect.left + rect.width / 2;
+              const distance = Math.abs(cardCenter - currentViewportCenter);
+
+              // Check if card is visible in viewport (at least partially)
+              const isVisible = rect.right > 0 && rect.left < window.innerWidth;
+              
+              // Check if card is close to center or straddling it
+              const isNearCenter = distance < viewportThreshold;
+              const isStraddlingCenter = rect.left < currentViewportCenter && rect.right > currentViewportCenter;
+
+              // Prioritize cards that are straddling center, but also consider nearby cards
+              if (isVisible && (isStraddlingCenter || isNearCenter) && distance < closestDistance) {
+                closestDistance = distance;
+                closestCard = card;
+              }
+            });
+
+            // Fallback: if no card found and we're at the start, select the first card
+            if (!closestCard && cards.length > 0) {
+              const firstCard = cards[0];
+              const firstRect = firstCard.getBoundingClientRect();
+              // If first card is visible and we haven't scrolled much, select it
+              if (firstRect.right > 0 && firstRect.left < window.innerWidth * 1.2) {
+                closestCard = firstCard;
+              }
+            }
+
+            if (closestCard) {
+              const cardId = closestCard.getAttribute('data-card-id');
+              if (cardId && cardId !== currentInViewId) {
+                currentInViewId = cardId;
+                setInViewId(cardId);
+                
+                // Close previous card smoothly, then open new one
+                if (currentOpenId && currentOpenId !== cardId) {
+                  setOpenId(null);
+                  setTimeout(() => {
+                    setOpenId(cardId);
+                    currentOpenId = cardId;
+                  }, 300);
+                } else {
+                  // Delay opening for smooth transition
+                  setTimeout(() => {
+                    setOpenId(cardId);
+                    currentOpenId = cardId;
+                  }, 200);
+                }
+              }
+            } else if (currentInViewId) {
+              // No card in view, close current
+              setInViewId(null);
+              setOpenId(null);
+              currentInViewId = null;
+              currentOpenId = null;
+            }
+          };
+
+          // Use ScrollTrigger to update on scroll with throttling
+          let rafId = null;
+          ScrollTrigger.create({
+            trigger: horizontalScrollRef.current,
+            start: 'top top',
+            end: () => `+=${scrollDistance}`,
+            onEnter: () => {
+              // When section enters, ensure first card is active
+              if (!currentInViewId && cards.length > 0) {
+                const firstCardId = cards[0].getAttribute('data-card-id');
+                if (firstCardId) {
+                  currentInViewId = firstCardId;
+                  setInViewId(firstCardId);
+                  setTimeout(() => {
+                    setOpenId(firstCardId);
+                    currentOpenId = firstCardId;
+                  }, 200);
+                }
+              }
+              updateActiveCard();
+            },
+            onUpdate: () => {
+              if (rafId) cancelAnimationFrame(rafId);
+              rafId = requestAnimationFrame(updateActiveCard);
+            },
+            invalidateOnRefresh: true,
+          });
+
+          // Initial check after a brief delay - ensure first card is active
+          setTimeout(() => {
+            updateActiveCard();
+            // Force first card to be active if nothing was selected after a short delay
+            setTimeout(() => {
+              if (!currentInViewId && cards.length > 0) {
+                const firstCardId = cards[0].getAttribute('data-card-id');
+                if (firstCardId) {
+                  currentInViewId = firstCardId;
+                  setInViewId(firstCardId);
+                  setTimeout(() => {
+                    setOpenId(firstCardId);
+                    currentOpenId = firstCardId;
+                  }, 200);
+                }
+              }
+            }, 150);
+          }, 100);
+
+          // Animate cards as they come into view
+          cards.forEach((card, index) => {
+            gsap.fromTo(
+              card,
+              { opacity: 0.6, scale: 0.95 },
+              {
+                opacity: 1,
+                scale: 1,
+                scrollTrigger: {
+                  trigger: horizontalScrollRef.current,
+                  start: 'top top',
+                  end: () => `+=${scrollDistance}`,
+                  scrub: 0.5,
+                  invalidateOnRefresh: true,
+                },
+              }
+            );
+          });
+        }
       }
 
       // Slow rotating background logo
@@ -428,7 +625,7 @@ const Features = () => {
       window.removeEventListener('resize', updateScanHeight);
       ctx.revert();
     };
-  }, []);
+  }, [solutions]);
 
   return (
     <section
@@ -536,17 +733,36 @@ const Features = () => {
           </div>
         </div>
 
-        {/* Cards */}
-        <div ref={gridRef} className="mt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-reveal="stagger">
-          {solutions.map((item) => (
-            <div key={item.id} data-animate="card" data-reveal-child>
-              <SolutionsCard
-                item={item}
-                isOpen={openId === item.id}
-                onToggle={() => setOpenId((prev) => (prev === item.id ? null : item.id))}
-              />
-            </div>
-          ))}
+        {/* Horizontal Scroll Section */}
+        <div 
+          ref={horizontalScrollRef} 
+          className="relative w-full h-screen flex items-center overflow-hidden"
+          style={{ minHeight: '100vh' }}
+        >
+          <div
+            ref={cardsContainerRef}
+            className="flex gap-6 px-6 md:px-12"
+            style={{ willChange: 'transform' }}
+          >
+            {solutions.map((item) => (
+              <div
+                key={item.id}
+                data-horizontal-card
+                data-card-id={item.id}
+                ref={(el) => {
+                  if (el) cardRefs.current[item.id] = el;
+                }}
+                className="flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[45vw] xl:w-[400px] max-w-md"
+                style={{ willChange: 'transform, opacity' }}
+              >
+                <SolutionsCard
+                  item={item}
+                  isOpen={openId === item.id}
+                  isInView={inViewId === item.id}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Bottom promise row */}

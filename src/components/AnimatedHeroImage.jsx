@@ -10,7 +10,7 @@ const AnimatedHeroImage = () => {
     <div
       ref={containerRef}
       className="relative w-full h-full flex items-center justify-center"
-      style={{ minHeight: '600px' }}
+      style={{ minHeight: '700px' }}
     >
       {/* Main Image Container - Isolated for Earth component */}
       <div

@@ -343,7 +343,7 @@ const Hero = () => {
 
       {/* Main Content */}
       <motion.div
-        className="container mx-auto px-6 lg:px-12 relative z-20 py-20"
+        className="max-w-8xl mx-auto px-6 lg:px-12 relative z-20 py-20"
         style={{
           opacity: opacity,
           scale: scale,
@@ -522,7 +522,6 @@ const Hero = () => {
         transition={{ delay: 2, ease: 'easeOut' }}
       >
         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-        <span className="text-xs text-gray-400">All Systems Operational</span>
       </motion.div>
     </section>
   );
