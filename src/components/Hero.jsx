@@ -361,7 +361,7 @@ const Hero = () => {
                   You Envision IT,
                 </div>
                 <div className="title-line block">
-                  <span className="bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent">
+                  <span className="text-white">
                     we make IT happen
                   </span>
                 </div>
@@ -416,6 +416,7 @@ const Hero = () => {
                           backgroundClip: "text",
                           WebkitBackgroundClip: "text",
                           WebkitTextFillColor: "transparent",
+                          fontFamily: "'Nunito', 'Quicksand', 'Poppins', system-ui, -apple-system, sans-serif",
                           filter: isTyping
                             ? "brightness(1.4) saturate(1.6) drop-shadow(0 0 12px rgba(255, 149, 0, 0.8))"
                             : "brightness(1) saturate(1) drop-shadow(0 0 4px rgba(244, 125, 17, 0.3))",

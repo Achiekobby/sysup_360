@@ -36,9 +36,6 @@ const AnimatedHeroImage = () => {
           /> */}
           <Earth />
           
-          {/* Animated border */}
-          <div className="absolute inset-0 rounded-2xl border-2 border-[#F47D11]/30 pointer-events-none" />
-          
           {/* Floating elements - moved outside Earth container to avoid interference */}
           <motion.div
             className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[#F47D11] to-[#F4733A] rounded-2xl opacity-80 blur-sm pointer-events-none"
