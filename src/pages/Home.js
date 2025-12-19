@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import AboutStory from '../components/AboutStory';
 import Features from '../components/Features';
 import Services from '../components/Services';
 import Stats from '../components/Stats';
@@ -45,6 +46,7 @@ const Home = () => {
       <div ref={rootRef} className="min-h-screen bg-gray-900 overflow-x-hidden">
         <Navbar />
         <Hero />
+        <AboutStory />
         <Features />
         <Services />
         <Stats />

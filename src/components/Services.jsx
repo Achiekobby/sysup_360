@@ -50,9 +50,9 @@ const Services = () => {
         title: 'Call Center Setup & Management',
         img: Images.call_center,
         summary:
-          'Deliver exceptional customer experiences with modern call center tools and reporting.',
+          'Your customers are the heartbeat of your business — and how you engage with them can make all the difference.',
         details:
-          'Call reporting, access control, call recording, and more — built to streamline communication and strengthen loyalty.',
+          'At SysUp360, we help you deliver exceptional customer experiences through our modern, user-friendly call center solutions. Equipped with advanced features like call reporting, access control, call recording, and more, our systems are designed to streamline communication, boost efficiency, and strengthen customer loyalty. Provide the kind of service that keeps customers coming back — powered by SysUp360.',
         chips: ['Reporting', 'Recording', 'Access Control'],
       },
       {
@@ -62,21 +62,21 @@ const Services = () => {
         title: 'USSD Services',
         img: Images.ussd_services,
         summary:
-          'Fast, reliable mobile interactions for payments, registrations, and surveys — no internet required.',
+          'At SysUp360, we help businesses reach customers anywhere — no internet required.',
         details:
-          'We design and integrate USSD menus tailored to your workflows with strong security and scalability for high volume users.',
+          'Our USSD solutions enable fast, reliable, and secure mobile interactions for everything from payments and registrations to balance checks and surveys. We design and integrate USSD menus tailored to your needs, ensuring seamless connectivity, strong security, and scalability for any volume of users. With SysUp360, you can deliver instant access and effortless engagement — anytime, on any device.',
         chips: ['No internet needed', 'Secure flows', 'Scalable'],
       },
       {
         id: 'networking',
         icon: '🛰️',
         kicker: 'Infrastructure',
-        title: 'Network Design & Management',
+        title: 'Network Design, Installation & Management',
         img: Images.networking,
         summary:
-          'A secure, resilient network foundation built for growth and performance.',
+          'A strong, scalable, and reliable network is the backbone of every successful business.',
         details:
-          'From on-site installations to enterprise rollouts, we deploy best-practice architectures that stay reliable and ready for what’s next.',
+          'At SysUp360, we make sure your infrastructure sits on a foundation built for growth and resilience — so you can focus on what truly matters: driving your business forward. Our team leaves nothing to chance. We deploy only the best systems, components, and practices to ensure your network stays secure, efficient, and ready for whatever comes next.',
         chips: ['Design', 'Deployment', 'Management'],
       },
       {
@@ -86,9 +86,9 @@ const Services = () => {
         title: 'IP PBX Installation & Management',
         img: Images.ip_pbx_installation_and_management,
         summary:
-          'Scalable VoIP PBX solutions with flexible interfaces that grow with your team.',
+          'Stay connected and in control with our scalable and customizable VoIP PBX solutions.',
         details:
-          'Support for FXS, FXO, GSM, E1 — plus advanced features and easy expansion for simultaneous calls.',
+          'Our systems give your business the flexibility to tailor telephony interfaces — including FXS, FXO, GSM, and E1 — to fit your unique communication needs. As your business grows, your PBX grows with you. Enjoy free user extensions, the ability to expand external simultaneous calls, and a suite of advanced features — all built to keep your communication seamless and cost-effective right out of the box.',
         chips: ['FXS/FXO', 'GSM/E1', 'Scalable'],
       },
       {
@@ -98,9 +98,9 @@ const Services = () => {
         title: 'WAN & Internet Disaster Recovery',
         img: Images.wan_internet_disaster_recovery,
         summary:
-          'Keep your business online with LTE backups and secure IPSEC tunnels for 99.9% uptime.',
+          "Your business can't afford to go offline — and with SysUp360, it won't.",
         details:
-          'Automatic failover and resilient connectivity across locations — designed to keep operations running even when providers fail.',
+          "Our WAN and Internet Disaster Recovery solution ensures your network stays up and running, even when your main internet provider goes down. Using LTE backup links and secure IPSEC tunnels, we keep your offices and teams connected across any location with 99.9% uptime. It's seamless, automatic, and built to keep your business moving — no matter what.",
         chips: ['LTE Backup', 'IPSEC', 'Failover'],
       },
       {
@@ -110,9 +110,9 @@ const Services = () => {
         title: 'Mobile App & Software Development',
         img: Images.mobile_app_software_development,
         summary:
-          'Turn ideas into powerful digital products with sleek UX and reliable performance.',
+          'Turn your ideas into powerful digital solutions with our app and software development team.',
         details:
-          'We plan, design, and build tailored apps and systems with seamless integrations — built for growth and real-world reliability.',
+          'Our strategy and planning team works closely with you to design and build sleek, high-performing applications that drive business growth. We develop using leading technologies like Java, PHP, C++, iOS, and Android, all tailored to your business needs. Seamless integration, sleek design, and reliable performance come standard.',
         chips: ['Strategy', 'UI/UX', 'Integrations'],
       },
       {
@@ -122,9 +122,9 @@ const Services = () => {
         title: '247Care (Outsourced IT)',
         img: Images.outsourced_it_24_7,
         summary:
-          'Expert IT support without in-house overhead — maintenance to complex system management.',
+          'Run your business with confidence while we take care of your IT.',
         details:
-          'Tap into experienced professionals whenever you need them — flexible, cost-effective, and built around your business.',
+          "SysUp360's 247Care Outsourced IT service gives you reliable, flexible and cost-effective support designed to fit your exact business needs. Instead of maintaining costly in-house specialists, you can tap into our team of experienced IT professionals — ready to handle everything from daily maintenance to complex system management. Get all the expertise you need, when you need it — without the overhead. That's smart IT, powered by SysUp360.",
         chips: ['24/7 Support', 'Cost-effective', 'Expert team'],
       },
       {
@@ -134,9 +134,9 @@ const Services = () => {
         title: 'VPS Hosting',
         img: Images.vps_hosting,
         summary:
-          'Fast, secure, scalable VPS hosting with dedicated resources and expert support.',
+          "Power your business with fast, secure and reliable VPS hosting from SysUp360.",
         details:
-          'Full control, reliable uptime, and strong security — flexible and built to grow with your workloads.',
+          "Enjoy dedicated resources, full control, and reliable uptime — all backed by strong security and expert support. Flexible, efficient, and built to grow with your business.",
         chips: ['Dedicated', 'Secure', 'Scalable'],
       },
       {
@@ -146,9 +146,9 @@ const Services = () => {
         title: 'Web Design & Email Hosting',
         img: Images.web_design_and_email_hosting,
         summary:
-          'Professional websites + branded email that build trust and credibility.',
+          "First impressions matter — and your online presence says it all.",
         details:
-          'Secure, reliable hosting with always-on access — give your business the strong digital foundation it deserves.',
+          "With SysUp360's web design and email hosting solutions, you get a professional website and branded email that build trust and showcase your business as credible and ready for growth. Enjoy secure, reliable hosting and the peace of mind that your website and emails are protected and always accessible. Get started today and give your business the strong digital foundation it deserves.",
         chips: ['Brand trust', 'Secure hosting', 'Always-on'],
       },
     ],
@@ -282,10 +282,10 @@ const Services = () => {
           </div>
 
           <h2 data-animate="header" className="mt-6 text-3xl sm:text-4xl md:text-5xl font-black text-gray-900">
-            Built to deploy. Designed to scale.
+            Our Solutions & Services
           </h2>
           <p data-animate="header" className="mt-4 text-gray-700 text-base sm:text-lg leading-relaxed">
-            Explore our offerings — crafted for startups and enterprises alike — with the same urgency, precision, and professionalism.
+            At SysUp360, we don't just provide IT services — we tailor solutions that grow with your business. Our diverse team brings together a wide range of technical expertise, giving us the flexibility and edge to deliver exactly what you need, when you need it. From quick support fixes for small businesses to full-scale deployments and enterprise rollouts, we approach every project with precision, urgency, and professionalism. Ready to take your IT to the next level? Explore our offerings below and see how SysUp360 can keep your business moving forward.
           </p>
         </div>
 

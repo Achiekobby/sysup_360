@@ -251,7 +251,7 @@ const Features = () => {
       'Integrations',
       'Custom App Dev',
       'iPaaS',
-      'DevOps',
+      'DevOPs',
       'DevSecOps',
       'Hyperconverged',
       'Virtualization',
@@ -269,10 +269,10 @@ const Features = () => {
         title: 'Call Center Setup & Management',
         illustrationType: 'call-center',
         summary:
-          'Modern, user-friendly call center solutions designed to boost efficiency and customer loyalty.',
+          'Your customers are the heartbeat of your business — and how you engage with them can make all the difference.',
         details:
-          'Advanced features like call reporting, access control, call recording, and more — built to streamline communication and deliver exceptional customer experiences.',
-        bullets: ['Call reporting & analytics', 'Access control', 'Call recording'],
+          'At SysUp360, we help you deliver exceptional customer experiences through our modern, user-friendly call center solutions. Equipped with advanced features like call reporting, access control, call recording, and more, our systems are designed to streamline communication, boost efficiency, and strengthen customer loyalty. Provide the kind of service that keeps customers coming back — powered by SysUp360.',
+        bullets: [],
       },
       {
         id: 'ussd',
@@ -280,10 +280,10 @@ const Features = () => {
         title: 'USSD Services',
         illustrationType: 'ussd',
         summary:
-          'Fast, reliable mobile interactions — no internet required — for payments, registrations, surveys, and more.',
+          'At SysUp360, we help businesses reach customers anywhere — no internet required.',
         details:
-          'We design and integrate USSD menus tailored to your needs with seamless connectivity, strong security, and scalability for any volume of users.',
-        bullets: ['Secure menu flows', 'Operator integrations', 'Scalable throughput'],
+          'Our USSD solutions enable fast, reliable, and secure mobile interactions for everything from payments and registrations to balance checks and surveys. We design and integrate USSD menus tailored to your needs, ensuring seamless connectivity, strong security, and scalability for any volume of users. With SysUp360, you can deliver instant access and effortless engagement — anytime, on any device.',
+        bullets: [],
       },
       {
         id: 'network',
@@ -291,10 +291,10 @@ const Features = () => {
         title: 'Network Design, Installation & Management',
         illustrationType: 'network',
         summary:
-          'A secure, resilient network foundation built for growth — so your business can move faster with confidence.',
+          'A strong, scalable, and reliable network is the backbone of every successful business.',
         details:
-          'From on-site installations to enterprise deployments, we deploy best-practice architectures and components that keep your network efficient and ready for what’s next.',
-        bullets: ['Secure design', 'Reliable deployments', 'Ongoing management'],
+          'At SysUp360, we make sure your infrastructure sits on a foundation built for growth and resilience — so you can focus on what truly matters: driving your business forward. Our team leaves nothing to chance. We deploy only the best systems, components, and practices to ensure your network stays secure, efficient, and ready for whatever comes next.',
+        bullets: [],
       },
       {
         id: 'pbx',
@@ -302,10 +302,10 @@ const Features = () => {
         title: 'IP PBX Installation & Management',
         illustrationType: 'pbx',
         summary:
-          'Scalable VoIP PBX solutions with flexible telephony interfaces for your unique communication needs.',
+          'Stay connected and in control with our scalable and customizable VoIP PBX solutions.',
         details:
-          'Interfaces including FXS, FXO, GSM, and E1 — plus free user extensions, expansion for simultaneous calls, and advanced PBX features to keep costs low.',
-        bullets: ['FXS/FXO/GSM/E1', 'Free extensions', 'Advanced PBX features'],
+          'Our systems give your business the flexibility to tailor telephony interfaces — including FXS, FXO, GSM, and E1 — to fit your unique communication needs. As your business grows, your PBX grows with you. Enjoy free user extensions, the ability to expand external simultaneous calls, and a suite of advanced features — all built to keep your communication seamless and cost-effective right out of the box.',
+        bullets: [],
       },
       {
         id: 'dr',
@@ -313,10 +313,10 @@ const Features = () => {
         title: 'WAN & Internet Disaster Recovery',
         illustrationType: 'dr',
         summary:
-          'Keep your business online with LTE backups and secure IPSEC tunnels — built for 99.9% uptime.',
+          "Your business can't afford to go offline — and with SysUp360, it won't.",
         details:
-          'Automatic failover and resilient connectivity across locations. We design disaster recovery strategies that keep operations running even during provider outages.',
-        bullets: ['LTE backup links', 'IPSEC tunnels', 'Automatic failover'],
+          "Our WAN and Internet Disaster Recovery solution ensures your network stays up and running, even when your main internet provider goes down. Using LTE backup links and secure IPSEC tunnels, we keep your offices and teams connected across any location with 99.9% uptime. It's seamless, automatic, and built to keep your business moving — no matter what.",
+        bullets: [],
       },
       {
         id: 'dev',
@@ -324,10 +324,10 @@ const Features = () => {
         title: 'Mobile App & Software Development',
         illustrationType: 'dev',
         summary:
-          'Turn ideas into high-performing applications with sleek UX and reliable integrations.',
+          'Turn your ideas into powerful digital solutions with our app and software development team.',
         details:
-          'We plan, design, and build tailored solutions using leading technologies (Java, PHP, C++, iOS, Android) with seamless integration and performance as standard.',
-        bullets: ['Product strategy', 'Sleek UI/UX', 'Reliable performance'],
+          'Our strategy and planning team works closely with you to design and build sleek, high-performing applications that drive business growth. We develop using leading technologies like Java, PHP, C++, iOS, and Android, all tailored to your business needs. Seamless integration, sleek design, and reliable performance come standard.',
+        bullets: [],
       },
       {
         id: '247care',
@@ -335,10 +335,10 @@ const Features = () => {
         title: '247Care (Outsourced IT)',
         illustrationType: 'care',
         summary:
-          'Flexible, cost-effective IT support without the overhead of in-house specialists.',
+          'Run your business with confidence while we take care of your IT.',
         details:
-          'Tap into experienced IT professionals for daily maintenance, troubleshooting, and complex system management — on demand.',
-        bullets: ['Daily support', 'System management', 'Lower overhead'],
+          "SysUp360's 247Care Outsourced IT service gives you reliable, flexible and cost-effective support designed to fit your exact business needs. Instead of maintaining costly in-house specialists, you can tap into our team of experienced IT professionals — ready to handle everything from daily maintenance to complex system management. Get all the expertise you need, when you need it — without the overhead. That's smart IT, powered by SysUp360.",
+        bullets: [],
       },
       {
         id: 'vps',
@@ -346,10 +346,10 @@ const Features = () => {
         title: 'VPS Hosting',
         illustrationType: 'vps',
         summary:
-          'Fast, secure, scalable VPS hosting with dedicated resources and strong uptime.',
+          'Power your business with fast, secure, and scalable VPS hosting from SysUp360.',
         details:
-          'Get full control, reliable performance, and expert support — built to grow with your business and protect your workloads.',
-        bullets: ['Dedicated resources', 'Strong security', 'Expert support'],
+          'Enjoy dedicated resources, full control, and reliable uptime — all backed by strong security and expert support. Flexible, efficient, and built to grow with your business.',
+        bullets: [],
       },
       {
         id: 'web',
@@ -357,10 +357,10 @@ const Features = () => {
         title: 'Web Design & Email Hosting',
         illustrationType: 'web',
         summary:
-          'Professional websites and branded email that build trust and elevate your brand.',
+          "First impressions matter — and your online presence says it all.",
         details:
-          'Secure, reliable hosting with always-on access — built to keep your website and email protected and available.',
-        bullets: ['Modern web design', 'Branded email', 'Secure hosting'],
+          "With SysUp360's web design and email hosting solutions, you get a professional website and branded email that build trust and showcase your business as credible and ready for growth. Enjoy secure, reliable hosting and the peace of mind that your website and emails are protected and always accessible. Get started today and give your business the strong digital foundation it deserves.",
+        bullets: [],
       },
     ],
     []
@@ -508,11 +508,10 @@ const Features = () => {
           </div>
 
           <h2 data-animate="header" className="mt-6 text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight">
-            You envision IT — we make IT happen.
+            Our Solutions & Services
           </h2>
           <p data-animate="header" className="mt-4 text-gray-300 text-base sm:text-lg leading-relaxed">
-            From fast support fixes for small businesses to full-scale enterprise rollouts, we deliver secure, tailored,
-            cost-effective solutions that grow with you.
+            At SysUp360, we don't just provide IT services — we tailor solutions that grow with your business. Our diverse team brings together a wide range of technical expertise, giving us the flexibility and edge to deliver exactly what you need, when you need it. From quick support fixes for small businesses to full-scale deployments and enterprise rollouts, we approach every project with precision, urgency, and professionalism. Ready to take your IT to the next level? Explore our offerings below and see how SysUp360 can keep your business moving forward.
           </p>
         </div>
 
