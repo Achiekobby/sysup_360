@@ -2,7 +2,17 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Images from '../Images';
+import { 
+  Headphones, 
+  Smartphone, 
+  Network, 
+  Phone, 
+  Shield, 
+  Code, 
+  Users, 
+  Cloud, 
+  Globe 
+} from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,16 +21,14 @@ const Services = () => {
   const headerRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
   const [active, setActive] = useState('call-center');
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   const items = useMemo(
     () => [
       {
         id: 'call-center',
-        icon: '🎧',
+        icon: Headphones,
         kicker: 'Customer Experience',
         title: 'Call Center Setup & Management',
-        img: Images.call_center,
         summary:
           'Your customers are the heartbeat of your business — and how you engage with them can make all the difference.',
         details:
@@ -29,10 +37,9 @@ const Services = () => {
       },
       {
         id: 'ussd',
-        icon: '📲',
+        icon: Smartphone,
         kicker: 'Mobile Engagement',
         title: 'USSD Services',
-        img: Images.ussd_services,
         summary:
           'At SysUp360, we help businesses reach customers anywhere — no internet required.',
         details:
@@ -41,10 +48,9 @@ const Services = () => {
       },
       {
         id: 'networking',
-        icon: '🛰️',
+        icon: Network,
         kicker: 'Infrastructure',
         title: 'Network Design, Installation & Management',
-        img: Images.networking,
         summary:
           'A strong, scalable, and reliable network is the backbone of every successful business.',
         details:
@@ -53,10 +59,9 @@ const Services = () => {
       },
       {
         id: 'pbx',
-        icon: '📞',
+        icon: Phone,
         kicker: 'Communication',
         title: 'IP PBX Installation & Management',
-        img: Images.ip_pbx_installation_and_management,
         summary:
           'Stay connected and in control with our scalable and customizable VoIP PBX solutions.',
         details:
@@ -65,10 +70,9 @@ const Services = () => {
       },
       {
         id: 'dr',
-        icon: '🛡️',
+        icon: Shield,
         kicker: 'Resilience',
         title: 'WAN & Internet Disaster Recovery',
-        img: Images.wan_internet_disaster_recovery,
         summary:
           "Your business can't afford to go offline — and with SysUp360, it won't.",
         details:
@@ -77,10 +81,9 @@ const Services = () => {
       },
       {
         id: 'dev',
-        icon: '⚙️',
+        icon: Code,
         kicker: 'Build & Integrate',
         title: 'Mobile App & Software Development',
-        img: Images.mobile_app_software_development,
         summary:
           'Turn your ideas into powerful digital solutions with our app and software development team.',
         details:
@@ -89,10 +92,9 @@ const Services = () => {
       },
       {
         id: 'care',
-        icon: '🧑‍💻',
+        icon: Users,
         kicker: 'Managed IT',
         title: '247Care (Outsourced IT)',
-        img: Images.outsourced_it_24_7,
         summary:
           'Run your business with confidence while we take care of your IT.',
         details:
@@ -101,10 +103,9 @@ const Services = () => {
       },
       {
         id: 'vps',
-        icon: '☁️',
+        icon: Cloud,
         kicker: 'Cloud',
         title: 'VPS Hosting',
-        img: Images.vps_hosting,
         summary:
           "Power your business with fast, secure and reliable VPS hosting from SysUp360.",
         details:
@@ -113,10 +114,9 @@ const Services = () => {
       },
       {
         id: 'web',
-        icon: '🌐',
+        icon: Globe,
         kicker: 'Digital Presence',
         title: 'Web Design & Email Hosting',
-        img: Images.web_design_and_email_hosting,
         summary:
           "First impressions matter — and your online presence says it all.",
         details:
@@ -255,10 +255,7 @@ const Services = () => {
           {items.map((item, index) => (
             <motion.button
               key={item.id}
-              onClick={() => {
-                setActive(item.id);
-                setImageLoaded(false);
-              }}
+              onClick={() => setActive(item.id)}
               className={`group relative overflow-hidden rounded-2xl border transition-all duration-500 text-left ${
                 active === item.id
                   ? 'lg:col-span-2 lg:row-span-2 border-[#F47D11]/60 bg-gradient-to-br from-gray-900/95 to-gray-800/95'
@@ -299,15 +296,51 @@ const Services = () => {
               <div className="relative p-5 sm:p-6">
                 {/* Icon and header */}
                 <div className="flex gap-4 justify-between items-start mb-4">
-                  <div
+                  <motion.div
                     className={`flex items-center justify-center rounded-xl transition-all duration-500 ${
                       active === item.id
-                        ? 'w-16 h-16 bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/30 border-2 border-[#F47D11]/40 text-3xl'
-                        : 'w-12 h-12 bg-gradient-to-br from-[#F47D11]/15 to-[#F4733A]/15 border border-[#F47D11]/20 text-2xl'
+                        ? 'w-16 h-16 bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/30 border-2 border-[#F47D11]/40'
+                        : 'w-12 h-12 bg-gradient-to-br from-[#F47D11]/15 to-[#F4733A]/15 border border-[#F47D11]/20'
                     }`}
+                    animate={
+                      active === item.id
+                        ? {
+                            rotate: [0, 5, -5, 0],
+                            scale: [1, 1.05, 1],
+                          }
+                        : {}
+                    }
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 1,
+                      ease: 'easeInOut',
+                    }}
                   >
-                    {item.icon}
-                  </div>
+                    <motion.div
+                      animate={
+                        active === item.id
+                          ? {
+                              y: [0, -3, 0],
+                            }
+                          : {}
+                      }
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    >
+                      <item.icon
+                        className={`transition-all duration-500 ${
+                          active === item.id
+                            ? 'w-8 h-8 text-[#F47D11]'
+                            : 'w-6 h-6 text-[#F47D11]/80 group-hover:text-[#F47D11]'
+                        }`}
+                        strokeWidth={active === item.id ? 2 : 1.5}
+                      />
+                    </motion.div>
+                  </motion.div>
                   {active !== item.id && (
                     <div className="text-xs uppercase tracking-wider text-[#F47D11]/60">{item.kicker}</div>
                   )}
@@ -358,27 +391,125 @@ const Services = () => {
                         ))}
                       </div>
 
-                      {/* Image */}
+                      {/* Animated Icon Display */}
                       <motion.div
-                        className="relative overflow-hidden rounded-xl border border-[#F47D11]/20 bg-gray-900/50"
+                        className="relative overflow-hidden rounded-xl border border-[#F47D11]/20 bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-12 sm:p-16 flex items-center justify-center"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
                       >
-                        <AnimatePresence mode="wait">
-                          <motion.img
-                            key={item.id}
-                            src={item.img}
-                            alt={item.title}
-                            className="w-full h-auto max-h-[400px] sm:max-h-[500px] object-contain"
-                            initial={{ opacity: 0, scale: 1.1 }}
-                            animate={{ opacity: imageLoaded ? 1 : 0.5, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.6 }}
-                            onLoad={() => setImageLoaded(true)}
+                        {/* Background effects */}
+                        <motion.div
+                          className="absolute inset-0 opacity-20"
+                          style={{
+                            background: 'radial-gradient(circle at 50% 50%, rgba(244,125,17,0.3), transparent 70%)',
+                          }}
+                          animate={{
+                            scale: [1, 1.2, 1],
+                            opacity: [0.2, 0.3, 0.2],
+                          }}
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            ease: 'easeInOut',
+                          }}
+                        />
+                        
+                        {/* Animated concentric circles */}
+                        {[...Array(3)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            className="absolute rounded-full border border-[#F47D11]/20"
+                            style={{
+                              width: `${120 + i * 60}px`,
+                              height: `${120 + i * 60}px`,
+                            }}
+                            animate={{
+                              scale: [1, 1.15, 1],
+                              opacity: [0.3, 0.1, 0.3],
+                              rotate: [0, 180, 360],
+                            }}
+                            transition={{
+                              duration: 4 + i,
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                              delay: i * 0.3,
+                            }}
                           />
+                        ))}
+
+                        {/* Large animated icon */}
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={item.id}
+                            className="relative z-10"
+                            initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
+                            animate={{ 
+                              opacity: 1, 
+                              scale: 1, 
+                              rotate: 0,
+                            }}
+                            exit={{ opacity: 0, scale: 0.5, rotate: 180 }}
+                            transition={{ duration: 0.6, ease: 'backOut' }}
+                          >
+                            <motion.div
+                              animate={{
+                                y: [0, -10, 0],
+                                rotate: [0, 5, -5, 0],
+                              }}
+                              transition={{
+                                duration: 4,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                              }}
+                            >
+                              <div className="relative p-8 rounded-2xl bg-gradient-to-br from-[#F47D11]/20 to-[#F4733A]/20 border-2 border-[#F47D11]/40 shadow-2xl shadow-[#F47D11]/20">
+                                <item.icon
+                                  className="w-24 h-24 sm:w-32 sm:h-32 text-[#F47D11]"
+                                  strokeWidth={1.5}
+                                />
+                                
+                                {/* Pulsing glow effect */}
+                                <motion.div
+                                  className="absolute inset-0 rounded-2xl bg-[#F47D11]/20 blur-xl"
+                                  animate={{
+                                    opacity: [0.3, 0.6, 0.3],
+                                    scale: [1, 1.05, 1],
+                                  }}
+                                  transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: 'easeInOut',
+                                  }}
+                                />
+                              </div>
+                            </motion.div>
+                          </motion.div>
                         </AnimatePresence>
-                        <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent pointer-events-none from-gray-900/30" />
+
+                        {/* Floating particles */}
+                        {[...Array(6)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            className="absolute w-2 h-2 bg-[#F47D11] rounded-full opacity-60"
+                            style={{
+                              left: `${20 + (i * 12)}%`,
+                              top: `${30 + (i % 3) * 20}%`,
+                            }}
+                            animate={{
+                              y: [0, -20, 0],
+                              x: [0, Math.sin(i) * 10, 0],
+                              opacity: [0.6, 0.2, 0.6],
+                              scale: [1, 1.5, 1],
+                            }}
+                            transition={{
+                              duration: 3 + i * 0.5,
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                              delay: i * 0.2,
+                            }}
+                          />
+                        ))}
                       </motion.div>
                     </motion.div>
                   ) : (
