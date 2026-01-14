@@ -6,40 +6,12 @@ import Images from '../Images';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ServiceShowcaseCard = ({ item, isActive, onClick }) => {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`relative text-left rounded-2xl border transition-all duration-300 overflow-hidden ${
-        isActive
-          ? 'border-[#F47D11]/60 bg-white/70 shadow-xl'
-          : 'border-white/10 bg-white/40 hover:bg-white/55'
-      } backdrop-blur-md`}
-    >
-      <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_20%_20%,rgba(244,125,17,0.18),transparent_45%),radial-gradient(circle_at_90%_60%,rgba(244,115,58,0.16),transparent_45%)]" />
-      <div className="relative p-5 flex gap-4 items-start">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F47D11]/25 to-[#F4733A]/25 border border-[#F47D11]/25 flex items-center justify-center text-xl">
-          {item.icon}
-        </div>
-        <div className="min-w-0">
-          <div className="text-xs uppercase tracking-widest text-gray-600">{item.kicker}</div>
-          <div className="mt-1 font-semibold text-gray-900">{item.title}</div>
-          <div className="mt-1 text-sm text-gray-700 line-clamp-2">{item.summary}</div>
-        </div>
-      </div>
-    </button>
-  );
-};
-
 const Services = () => {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const listARef = useRef(null);
-  const listBRef = useRef(null);
-  const previewRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
   const [active, setActive] = useState('call-center');
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const items = useMemo(
     () => [
@@ -155,8 +127,6 @@ const Services = () => {
     []
   );
 
-  const activeItem = items.find((i) => i.id === active) || items[0];
-
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return undefined;
@@ -179,61 +149,6 @@ const Services = () => {
           },
         }
       );
-
-      const listA = listARef.current?.querySelectorAll('[data-animate="service-card"]') || [];
-      const listB = listBRef.current?.querySelectorAll('[data-animate="service-card"]') || [];
-      const preview = previewRef.current;
-
-      gsap.fromTo(
-        listA,
-        { opacity: 0, x: -30 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          stagger: 0.08,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: listARef.current,
-            start: 'top 78%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        preview,
-        { opacity: 0, y: 24, scale: 0.98 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.9,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: previewRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
-
-      gsap.fromTo(
-        listB,
-        { opacity: 0, x: 30 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          stagger: 0.08,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: listBRef.current,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse',
-          },
-        }
-      );
     }, sectionRef);
 
     return () => ctx.revert();
@@ -243,145 +158,260 @@ const Services = () => {
     <section
       ref={sectionRef}
       id="services"
-      className="relative py-24 px-6 overflow-hidden"
+      className="overflow-hidden relative min-h-screen"
       style={{
-        background:
-          'radial-gradient(1200px 800px at 20% 10%, rgba(244,125,17,0.22), transparent 55%), radial-gradient(900px 700px at 90% 40%, rgba(244,115,58,0.18), transparent 55%), linear-gradient(180deg, #fafafa 0%, #f5f7fb 50%, #eef2ff 100%)',
+        background: 'linear-gradient(135deg, #0a0a0a 0%, #16213e 50%, #1a1a2e 100%)',
       }}
     >
-      {/* Background motif */}
+      {/* Enhanced Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(17,24,39,.6)_1px,transparent_1px),linear-gradient(90deg,rgba(17,24,39,.6)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        {/* Animated gradient orbs */}
         <motion.div
-          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F47D11]/35 to-transparent"
-          animate={{ y: [0, 900] }}
-          transition={{ duration: 4.8, repeat: Infinity, ease: 'linear' }}
+          className="absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full blur-3xl opacity-40"
+          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.4), transparent 70%)' }}
+          animate={{
+            x: [0, 50, 0],
+            y: [0, -50, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute -top-24 -right-24 w-[520px] h-[520px] rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.25), transparent 60%)' }}
-          animate={{ scale: [1, 1.08, 1] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-40"
+          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.35), transparent 70%)' }}
+          animate={{
+            x: [0, -40, 0],
+            y: [0, 40, 0],
+            scale: [1, 1.15, 1],
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
         />
+        
+        {/* Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
+        
+        {/* Scan line */}
         <motion.div
-          className="absolute -bottom-28 -left-28 w-[560px] h-[560px] rounded-full blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.22), transparent 60%)' }}
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#F47D11]/50 to-transparent shadow-[0_0_20px_rgba(244,125,17,0.6)]"
+          animate={{ y: [0, 1000] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
         />
+
+        {/* Floating particles */}
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-[#F47D11] rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0, 0.8, 0],
+              scale: [0.5, 1.5, 0.5],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 3,
+              repeat: Infinity,
+              delay: Math.random() * 3,
+            }}
+          />
+        ))}
       </div>
 
-      <div className="container mx-auto relative z-10" data-reveal="up">
-        <div ref={headerRef} className="max-w-3xl mx-auto text-center">
-          <div
+      <div className="container relative z-10 px-6 py-16 mx-auto sm:py-24">
+        {/* Header */}
+        <div ref={headerRef} className="mx-auto mb-16 max-w-4xl text-center sm:mb-20">
+          {/* <motion.div
             data-animate="header"
-            className="inline-flex items-center gap-3 bg-white/50 backdrop-blur-md px-6 py-3 rounded-full border border-black/10"
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-[#F47D11]/15 to-[#F4733A]/15 backdrop-blur-md px-6 py-3 rounded-full border border-[#F47D11]/30 mb-6"
           >
-            <div className="w-2 h-2 bg-[#F47D11] rounded-full animate-pulse" />
-            <span className="text-gray-800 font-semibold text-sm tracking-wider">Our Solutions & Services</span>
-          </div>
+            <motion.div
+              className="w-2 h-2 bg-[#F47D11] rounded-full"
+              animate={{ scale: [1, 1.3, 1], opacity: [1, 0.6, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            <span className="text-sm font-bold tracking-wider text-[#F47D11] uppercase">Portfolio</span>
+          </motion.div> */}
 
-          <h2 data-animate="header" className="mt-6 text-3xl sm:text-4xl md:text-5xl font-black text-gray-900">
-            Our Solutions & Services
+          <h2
+            data-animate="header"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6"
+          >
+            <span className="block">What We</span>
+            <span className="block bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent mt-2">
+              Deliver
+            </span>
           </h2>
-          <p data-animate="header" className="mt-4 text-gray-700 text-base sm:text-lg leading-relaxed">
-            At SysUp360, we don't just provide IT services — we tailor solutions that grow with your business. Our diverse team brings together a wide range of technical expertise, giving us the flexibility and edge to deliver exactly what you need, when you need it. From quick support fixes for small businesses to full-scale deployments and enterprise rollouts, we approach every project with precision, urgency, and professionalism. Ready to take your IT to the next level? Explore our offerings below and see how SysUp360 can keep your business moving forward.
+
+          <p data-animate="header" className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-300 sm:text-xl">
+            From infrastructure to innovation — explore our complete portfolio of IT solutions designed to transform how your business operates and grows.
           </p>
         </div>
 
-        <div className="mt-12 grid lg:grid-cols-12 gap-8 items-start" data-reveal="stagger">
-          {/* Left list */}
-          <div ref={listARef} className="lg:col-span-5 space-y-3">
-            {items.slice(0, 6).map((item) => (
-              <div key={item.id} data-reveal-child data-animate="service-card">
-                <ServiceShowcaseCard
-                key={item.id}
-                item={item}
-                isActive={active === item.id}
-                onClick={() => setActive(item.id)}
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* Right preview */}
-          <div className="lg:col-span-7">
-            <div
-              ref={previewRef}
-              className="relative rounded-3xl overflow-hidden border border-black/10 bg-white/40 backdrop-blur-md shadow-2xl"
-              data-reveal-child
+        {/* Modern Grid Layout */}
+        <div className="grid gap-4 mx-auto max-w-7xl lg:grid-cols-3 lg:gap-6">
+          {items.map((item, index) => (
+            <motion.button
+              key={item.id}
+              onClick={() => {
+                setActive(item.id);
+                setImageLoaded(false);
+              }}
+              className={`group relative overflow-hidden rounded-2xl border transition-all duration-500 text-left ${
+                active === item.id
+                  ? 'lg:col-span-2 lg:row-span-2 border-[#F47D11]/60 bg-gradient-to-br from-gray-900/95 to-gray-800/95'
+                  : 'border-gray-800/60 bg-gray-900/50 hover:border-[#F47D11]/30 hover:bg-gray-900/70'
+              } backdrop-blur-xl`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+              viewport={{ once: true }}
+              whileHover={{
+                scale: active === item.id ? 1 : 1.02,
+                y: active === item.id ? 0 : -4,
+              }}
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(244,125,17,0.18),transparent_45%),radial-gradient(circle_at_85%_60%,rgba(244,115,58,0.14),transparent_45%)]" />
+              {/* Background glow effect */}
+              {active === item.id && (
+                <motion.div
+                  className="absolute inset-0 opacity-30"
+                  style={{
+                    background: 'radial-gradient(circle at 30% 20%, rgba(244,125,17,0.25), transparent 60%), radial-gradient(circle at 80% 70%, rgba(244,115,58,0.2), transparent 60%)',
+                  }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.3 }}
+                  transition={{ duration: 0.5 }}
+                />
+              )}
 
-              <div className="relative p-6 sm:p-8">
-                <div className="flex items-start justify-between gap-6">
-                  <div>
-                    <div className="text-xs uppercase tracking-widest text-gray-600">{activeItem.kicker}</div>
-                    <div className="mt-2 text-2xl sm:text-3xl font-black text-gray-900">{activeItem.title}</div>
-                    <div className="mt-3 text-gray-700 leading-relaxed">{activeItem.details}</div>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {activeItem.chips.map((c) => (
-                        <span
-                          key={c}
-                          className="px-3 py-1 rounded-full bg-white/60 border border-black/10 text-sm text-gray-800"
-                        >
-                          {c}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+              {/* Active indicator */}
+              {active === item.id && (
+                <motion.div
+                  className="absolute top-4 right-4 w-3 h-3 rounded-full bg-[#F47D11] shadow-lg shadow-[#F47D11]/50"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: [1, 1.3, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              )}
 
-                  <div className="hidden sm:flex items-center gap-2">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#F47D11]/20 to-[#F4733A]/20 border border-[#F47D11]/25 flex items-center justify-center text-xl">
-                      {activeItem.icon}
-                    </div>
+              <div className="relative p-5 sm:p-6">
+                {/* Icon and header */}
+                <div className="flex gap-4 justify-between items-start mb-4">
+                  <div
+                    className={`flex items-center justify-center rounded-xl transition-all duration-500 ${
+                      active === item.id
+                        ? 'w-16 h-16 bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/30 border-2 border-[#F47D11]/40 text-3xl'
+                        : 'w-12 h-12 bg-gradient-to-br from-[#F47D11]/15 to-[#F4733A]/15 border border-[#F47D11]/20 text-2xl'
+                    }`}
+                  >
+                    {item.icon}
                   </div>
+                  {active !== item.id && (
+                    <div className="text-xs uppercase tracking-wider text-[#F47D11]/60">{item.kicker}</div>
+                  )}
                 </div>
 
-                <div className="mt-6 relative rounded-2xl overflow-hidden border border-black/10">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={activeItem.id}
-                      src={activeItem.img}
-                      alt={activeItem.title}
-                      className="w-full h-[260px] sm:h-[340px] lg:h-[420px] object-cover"
-                      initial={{ opacity: 0, scale: 1.03 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
-                    />
-                  </AnimatePresence>
+                {/* Title and summary */}
+                <div>
+                  {active === item.id && (
+                    <motion.div
+                      className="text-xs uppercase tracking-wider text-[#F47D11] mb-2"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: 0.1 }}
+                    >
+                      {item.kicker}
+                    </motion.div>
+                  )}
+                  <h3
+                    className={`font-black leading-tight transition-all duration-500 ${
+                      active === item.id
+                        ? 'text-2xl sm:text-3xl text-white mb-4'
+                        : 'text-lg text-white group-hover:text-[#F47D11]'
+                    }`}
+                  >
+                    {item.title}
+                  </h3>
+                  
+                  {active === item.id ? (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                      <p className="mb-6 leading-relaxed text-gray-300">{item.details}</p>
+                      
+                      {/* Chips */}
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {item.chips.map((chip, i) => (
+                          <motion.span
+                            key={chip}
+                            className="px-3 py-1.5 text-xs font-semibold text-[#F47D11] rounded-full bg-[#F47D11]/10 border border-[#F47D11]/20"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.3, delay: 0.3 + i * 0.05 }}
+                          >
+                            {chip}
+                          </motion.span>
+                        ))}
+                      </div>
 
-                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-white/15 via-transparent to-transparent" />
+                      {/* Image */}
+                      <motion.div
+                        className="relative overflow-hidden rounded-xl border border-[#F47D11]/20 bg-gray-900/50"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                      >
+                        <AnimatePresence mode="wait">
+                          <motion.img
+                            key={item.id}
+                            src={item.img}
+                            alt={item.title}
+                            className="w-full h-auto max-h-[400px] sm:max-h-[500px] object-contain"
+                            initial={{ opacity: 0, scale: 1.1 }}
+                            animate={{ opacity: imageLoaded ? 1 : 0.5, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.6 }}
+                            onLoad={() => setImageLoaded(true)}
+                          />
+                        </AnimatePresence>
+                        <div className="absolute inset-0 bg-gradient-to-t via-transparent to-transparent pointer-events-none from-gray-900/30" />
+                      </motion.div>
+                    </motion.div>
+                  ) : (
+                    <p className="mt-2 text-sm text-gray-400 line-clamp-2">{item.summary}</p>
+                  )}
                 </div>
               </div>
-            </div>
 
-            {/* Second row list (keeps layout balanced) */}
-            <div ref={listBRef} className="mt-6 grid sm:grid-cols-2 gap-3" data-reveal="stagger">
-              {items.slice(6).map((item) => (
-                <div key={item.id} data-reveal-child data-animate="service-card">
-                  <ServiceShowcaseCard
-                    key={item.id}
-                    item={item}
-                    isActive={active === item.id}
-                    onClick={() => setActive(item.id)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+              {/* Decorative corner */}
+              {active === item.id && (
+                <motion.div
+                  className="absolute bottom-0 left-0 w-24 h-24 opacity-20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.2 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-[#F47D11] to-transparent" />
+                  <div className="absolute bottom-0 left-0 w-px h-full bg-gradient-to-t from-[#F47D11] to-transparent" />
+                </motion.div>
+              )}
+            </motion.button>
+          ))}
         </div>
 
+        {/* Bottom hint */}
         <motion.div
-          className="mt-12 flex items-center justify-center"
-          initial={{ opacity: 0, y: 10 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-          transition={{ duration: 0.6 }}
+          className="flex justify-center items-center mt-12 text-sm text-gray-500"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isInView ? 1 : 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
         >
-          <div className="text-sm text-gray-600">
-            Tip: click any card to preview details + imagery.
-          </div>
+          <span className="text-[#F47D11]">•</span>
+          <span className="ml-2">Click any service to explore details</span>
         </motion.div>
       </div>
     </section>

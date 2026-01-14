@@ -43,11 +43,11 @@ const Home = () => {
 
   return (
     <ParallaxProvider>
-      <div ref={rootRef} className="min-h-screen bg-gray-900 overflow-x-hidden">
+      <div ref={rootRef} className="overflow-x-hidden min-h-screen bg-gray-900">
         <Navbar />
         <Hero />
-        <AboutStory />
         <Features />
+        <AboutStory />
         <Services />
         <Stats />
         <Testimonials />

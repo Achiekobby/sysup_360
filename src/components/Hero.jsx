@@ -251,20 +251,22 @@ const Hero = () => {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-900"
+      className="flex overflow-hidden relative justify-center items-center min-h-screen bg-gray-900"
       id="home"
       style={{
         background:
           "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
         position: "relative",
         zIndex: 1,
+        paddingTop: "clamp(1rem, 2vh, 2rem)",
+        paddingBottom: "clamp(2rem, 5vh, 4rem)",
       }}
     >
       {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden z-0">
+      <div className="overflow-hidden absolute inset-0 z-0">
         {/* Gradient Orbs with parallax - optimized */}
         <motion.div
-          className="floating-orb-1 absolute top-20 right-20 w-96 h-96 rounded-full blur-3xl glow-pulse"
+          className="absolute top-20 right-20 w-96 h-96 rounded-full blur-3xl floating-orb-1 glow-pulse"
           style={{
             background:
               "radial-gradient(circle, rgba(244, 125, 17, 0.3) 0%, transparent 70%)",
@@ -274,7 +276,7 @@ const Hero = () => {
           }}
         />
         <motion.div
-          className="floating-orb-2 absolute bottom-40 left-10 w-80 h-80 rounded-full blur-3xl"
+          className="absolute left-10 bottom-40 w-80 h-80 rounded-full blur-3xl floating-orb-2"
           style={{
             background:
               "radial-gradient(circle, rgba(244, 115, 58, 0.25) 0%, transparent 70%)",
@@ -343,7 +345,7 @@ const Hero = () => {
 
       {/* Main Content */}
       <motion.div
-        className="max-w-8xl mx-auto px-6 lg:px-12 relative z-20 py-20"
+        className="relative z-20 px-6 pt-4 pb-8 mx-auto max-w-8xl lg:px-12 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16"
         style={{
           opacity: opacity,
           scale: scale,
@@ -351,25 +353,71 @@ const Hero = () => {
           willChange: "transform, opacity",
         }}
       >
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[85vh]">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start lg:items-center min-h-0 lg:min-h-[75vh]">
           {/* Left Content */}
-          <div className="text-center lg:text-left space-y-8 mt-20 relative z-30">
+          <div className="relative z-30 mt-0 space-y-4 text-center lg:text-left sm:space-y-5 lg:space-y-6">
             {/* Title */}
-            <div ref={titleRef} className="space-y-2" data-reveal="tilt">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.15]">
-                <div className="title-line text-white block mb-2">
-                  You Envision IT,
+            <div ref={titleRef} className="space-y-1 sm:space-y-2" data-reveal="tilt">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.15]">
+                <div className="block mb-1 text-white title-line sm:mb-2">
+                  You envision{" "}
+                  <motion.span
+                    className="inline-block relative"
+                    animate={{
+                      scale: [1, 1.08, 1],
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    style={{
+                      willChange: "transform",
+                    }}
+                  >
+                    <span
+                      className="relative z-10 font-black"
+                      style={{
+                        background: "linear-gradient(135deg, #F47D11 0%, #FF9500 50%, #F4733A 100%)",
+                        backgroundClip: "text",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        filter: "drop-shadow(0 0 8px rgba(244, 125, 17, 0.6))",
+                      }}
+                    >
+                      IT
+                    </span>
+                    <motion.span
+                      className="absolute inset-0 opacity-60 blur-xl"
+                      animate={{
+                        opacity: [0.4, 0.8, 0.4],
+                        scale: [1, 1.15, 1],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      style={{
+                        background: "radial-gradient(circle, rgba(244, 125, 17, 0.8) 0%, transparent 70%)",
+                        willChange: "opacity, transform",
+                        zIndex: 0,
+                        transform: "translateZ(0)",
+                      }}
+                    />
+                  </motion.span>
+                  ,
                 </div>
-                <div className="title-line block">
+                <div className="block title-line">
                   <span className="text-white">
                     we make IT happen
                   </span>
                 </div>
-                <div className="title-line text-white/90 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-6 font-light flex items-center justify-center lg:justify-start gap-3 flex-wrap">
-                  <span>with our 360°</span>
+                <div className="flex flex-wrap gap-2 justify-center items-center mt-3 text-2xl font-light title-line text-white/90 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:mt-4 lg:mt-5 lg:justify-start sm:gap-3">
+                  <span>with our 360</span>
                   <span className="relative inline-block min-w-[250px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] text-left h-[1.2em] overflow-visible">
                     <motion.span
-                      className="font-bold uppercase tracking-wide relative inline-block z-30"
+                      className="inline-block relative z-30 font-bold tracking-wide uppercase"
                       animate={{
                         scale: isTyping ? [1, 1.03, 1] : 1,
                       }}
@@ -435,10 +483,10 @@ const Hero = () => {
             {/* Service chips */}
             <div
               ref={servicesRef}
-              className="flex flex-wrap gap-2 justify-center lg:justify-start mt-8"
+              className="flex flex-wrap gap-2 justify-center mt-4 lg:justify-start sm:mt-5 lg:mt-6"
               data-reveal="stagger"
             >
-              {services.slice(0, 7).map((service) => (
+              {/* {services.slice(0, 7).map((service) => (
                 <motion.span
                   key={service}
                   className="service-badge px-4 py-2 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-full text-xs sm:text-sm text-gray-300 hover:border-[#F47D11]/50 hover:text-[#F47D11] transition-all duration-300 cursor-pointer"
@@ -450,19 +498,19 @@ const Hero = () => {
                 >
                   {service}
                 </motion.span>
-              ))}
+              ))} */}
             </div>
           </div>
 
           {/* Right Visual - Animated Image */}
           <motion.div
             ref={imageRef}
-            className="relative w-full h-full flex items-start justify-center -mt-16 lg:-mt-10"
-            style={{ minHeight: "600px", height: "100%" }}
+            className="flex relative justify-center items-center -mt-8 w-full h-full sm:-mt-12 lg:-mt-4"
+            style={{ minHeight: "clamp(400px, 50vh, 600px)", height: "100%" }}
             data-reveal="clip"
           >
             {/* Decorative elements around image - optimized */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex absolute inset-0 justify-center items-center">
               <motion.div
                 className="absolute w-[120%] h-[120%] rounded-full border border-[#F47D11]/10"
                 style={{ willChange: "transform" }}
@@ -490,7 +538,7 @@ const Hero = () => {
 
       {/* Scroll Indicator - optimized */}
       <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20"
+        className="absolute bottom-10 left-1/2 z-20 transform -translate-x-1/2"
         style={{ willChange: 'transform, opacity' }}
         animate={{ y: [0, 15, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
@@ -498,8 +546,8 @@ const Hero = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
       >
-        <div className="flex flex-col items-center gap-3">
-          <span className="text-gray-400 text-xs font-medium uppercase tracking-widest">
+        <div className="flex flex-col gap-3 items-center">
+          <span className="text-xs font-medium tracking-widest text-gray-400 uppercase">
             Discover More
           </span>
           <div className="w-6 h-10 border-2 border-[#F47D11]/50 rounded-full flex justify-center relative overflow-hidden backdrop-blur-sm">
@@ -515,7 +563,7 @@ const Hero = () => {
 
       {/* Tech badge - optimized */}
       <motion.div
-        className="absolute bottom-10 right-10 hidden lg:flex items-center gap-2 bg-gray-900/50 backdrop-blur-md px-4 py-2 rounded-full border border-gray-800/50"
+        className="hidden absolute right-10 bottom-10 gap-2 items-center px-4 py-2 rounded-full border backdrop-blur-md lg:flex bg-gray-900/50 border-gray-800/50"
         style={{ willChange: 'transform, opacity' }}
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -164,7 +164,7 @@ const IllustratedIcon = ({ type }) => {
 const SolutionsCard = ({ item, isOpen, isInView }) => {
   return (
     <motion.div
-      className="group text-left relative overflow-hidden rounded-2xl border border-gray-800/60 bg-gray-900/30 backdrop-blur-md p-6 transition-all duration-500"
+      className="overflow-hidden relative p-6 text-left rounded-2xl border backdrop-blur-md transition-all duration-500 group border-gray-800/60 bg-gray-900/30"
       data-solution-card="true"
       data-card-id={item.id}
       animate={{
@@ -191,12 +191,12 @@ const SolutionsCard = ({ item, isOpen, isInView }) => {
       )}
 
       <div className="relative">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex gap-4 justify-between items-start">
           <div>
-            <div className="text-xs uppercase tracking-widest text-gray-400">{item.kicker}</div>
+            <div className="text-xs tracking-widest text-gray-400 uppercase">{item.kicker}</div>
             <div className="mt-2 text-xl font-semibold text-white">{item.title}</div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <motion.div
               className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#F47D11]/10 to-[#F4733A]/10 border border-[#F47D11]/15"
               animate={{
@@ -210,64 +210,26 @@ const SolutionsCard = ({ item, isOpen, isInView }) => {
           </div>
         </div>
 
-        <div className="mt-3 text-sm text-gray-300 leading-relaxed">
+        <div className="mt-3 text-sm leading-relaxed text-gray-300">
           {item.summary}
         </div>
 
-        <AnimatePresence initial={false}>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0, y: -20 }}
-              animate={{ opacity: 1, height: 'auto', y: 0 }}
-              exit={{ opacity: 0, height: 0, y: -20 }}
-              transition={{ 
-                duration: 0.6, 
-                ease: [0.25, 0.1, 0.25, 1],
-                height: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
-                opacity: { duration: 0.4 }
-              }}
-              className="overflow-hidden"
-            >
-              {/* Shimmer effect on expand */}
-              <motion.div
-                className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-transparent via-[#F47D11]/50 to-transparent"
-                initial={{ x: -10, opacity: 0 }}
-                animate={{ x: ['100%', '100%'], opacity: [0, 1, 0] }}
-                transition={{ duration: 0.8, delay: 0.2, ease: 'easeInOut' }}
-              />
-              
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.4 }}
-                className="mt-4 pt-4 border-t border-gray-800/60 text-sm text-gray-300 leading-relaxed"
-              >
-                {item.details}
-              </motion.div>
-              {!!item.bullets?.length && (
-                <motion.ul
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
-                  className="mt-3 grid gap-2 sm:grid-cols-2"
-                >
-                  {item.bullets.map((b, idx) => (
-                    <motion.li
-                      key={b}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + idx * 0.05, duration: 0.3 }}
-                      className="flex items-start gap-2 text-sm text-gray-300"
-                    >
-                      <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#F47D11]" />
-                      <span>{b}</span>
-                    </motion.li>
-                  ))}
-                </motion.ul>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Always show details - no animation */}
+        {isOpen && (
+          <div className="pt-4 mt-4 text-sm leading-relaxed text-gray-300 border-t border-gray-800/60">
+            {item.details}
+            {!!item.bullets?.length && (
+              <ul className="grid gap-2 mt-3 sm:grid-cols-2">
+                {item.bullets.map((b) => (
+                  <li key={b} className="flex gap-2 items-start text-sm text-gray-300">
+                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-[#F47D11]" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -279,7 +241,7 @@ const Features = () => {
   const horizontalScrollRef = useRef(null);
   const cardsContainerRef = useRef(null);
   const cardRefs = useRef({});
-  const [openId, setOpenId] = useState('call-center'); // Default to first card
+  // All cards are always open - no expand/collapse animation
   const [inViewId, setInViewId] = useState('call-center'); // Default to first card
   const [scanHeight, setScanHeight] = useState(900);
 
@@ -447,10 +409,10 @@ const Features = () => {
           const totalWidth = (cardWidth + gap) * (cards.length - 1);
           const scrollDistance = totalWidth + cardWidth;
 
-          // Pin the horizontal scroll section
+          // Pin the horizontal scroll section - start when section is visible in viewport
           ScrollTrigger.create({
             trigger: horizontalScrollRef.current,
-            start: 'top top',
+            start: 'top 15%',
             end: () => `+=${scrollDistance}`,
             pin: true,
             scrub: 1,
@@ -464,16 +426,15 @@ const Features = () => {
             ease: 'none',
             scrollTrigger: {
               trigger: horizontalScrollRef.current,
-              start: 'top top',
+              start: 'top 15%',
               end: () => `+=${scrollDistance}`,
               scrub: 1,
               invalidateOnRefresh: true,
             },
           });
 
-          // Auto-expand cards based on viewport position
+          // Track which card is in view (all cards are always open)
           let currentInViewId = null;
-          let currentOpenId = null;
 
           const updateActiveCard = () => {
             let closestCard = null;
@@ -515,28 +476,11 @@ const Features = () => {
               if (cardId && cardId !== currentInViewId) {
                 currentInViewId = cardId;
                 setInViewId(cardId);
-                
-                // Close previous card smoothly, then open new one
-                if (currentOpenId && currentOpenId !== cardId) {
-                  setOpenId(null);
-                  setTimeout(() => {
-                    setOpenId(cardId);
-                    currentOpenId = cardId;
-                  }, 300);
-                } else {
-                  // Delay opening for smooth transition
-                  setTimeout(() => {
-                    setOpenId(cardId);
-                    currentOpenId = cardId;
-                  }, 200);
-                }
               }
             } else if (currentInViewId) {
-              // No card in view, close current
+              // No card in view, reset
               setInViewId(null);
-              setOpenId(null);
               currentInViewId = null;
-              currentOpenId = null;
             }
           };
 
@@ -544,7 +488,7 @@ const Features = () => {
           let rafId = null;
           ScrollTrigger.create({
             trigger: horizontalScrollRef.current,
-            start: 'top top',
+            start: 'top 15%',
             end: () => `+=${scrollDistance}`,
             onEnter: () => {
               // When section enters, ensure first card is active
@@ -553,10 +497,6 @@ const Features = () => {
                 if (firstCardId) {
                   currentInViewId = firstCardId;
                   setInViewId(firstCardId);
-                  setTimeout(() => {
-                    setOpenId(firstCardId);
-                    currentOpenId = firstCardId;
-                  }, 200);
                 }
               }
               updateActiveCard();
@@ -578,10 +518,6 @@ const Features = () => {
                 if (firstCardId) {
                   currentInViewId = firstCardId;
                   setInViewId(firstCardId);
-                  setTimeout(() => {
-                    setOpenId(firstCardId);
-                    currentOpenId = firstCardId;
-                  }, 200);
                 }
               }
             }, 150);
@@ -631,7 +567,7 @@ const Features = () => {
     <section
       ref={sectionRef}
       id="solutions"
-      className="relative py-24 px-6 min-h-screen overflow-hidden"
+      className="overflow-hidden relative px-6 py-24 min-h-screen"
       style={{
         background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
       }}
@@ -640,16 +576,16 @@ const Features = () => {
       <div id="features" className="absolute -top-24" />
 
       {/* Background (match Hero) */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="overflow-hidden absolute inset-0">
         {/* Hero-like orbs */}
         <motion.div
-          className="absolute top-20 right-20 w-96 h-96 rounded-full blur-3xl opacity-70"
+          className="absolute top-20 right-20 w-96 h-96 rounded-full opacity-70 blur-3xl"
           style={{ background: 'radial-gradient(circle, rgba(244, 125, 17, 0.3) 0%, transparent 70%)' }}
           animate={{ y: [0, 30, 0], x: [0, 20, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute bottom-40 left-10 w-80 h-80 rounded-full blur-3xl opacity-70"
+          className="absolute left-10 bottom-40 w-80 h-80 rounded-full opacity-70 blur-3xl"
           style={{ background: 'radial-gradient(circle, rgba(244, 115, 58, 0.25) 0%, transparent 70%)' }}
           animate={{ y: [0, -35, 0], x: [0, -25, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
@@ -694,26 +630,52 @@ const Features = () => {
         ))}
       </div>
 
-      <div className="container mx-auto relative z-10">
-        <div ref={headerRef} className="max-w-3xl mx-auto text-center mb-12" data-reveal="up">
-          <div
+      <div className="container relative z-10 mx-auto">
+        <div ref={headerRef} className="mx-auto mb-20 max-w-5xl text-center" data-reveal="up">
+          {/* <div
             data-animate="header"
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-[#F47D11]/10 to-[#F4733A]/10 backdrop-blur-sm px-6 py-3 rounded-full border border-[#F47D11]/20"
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-[#F47D11]/10 to-[#F4733A]/10 backdrop-blur-sm px-6 py-3 rounded-full border border-[#F47D11]/20 mb-8"
           >
             <div className="w-2 h-2 bg-[#F47D11] rounded-full animate-pulse" />
             <span className="text-[#F47D11] font-semibold text-sm tracking-wider">Solutions & Services</span>
+          </div> */}
+
+          <h2 
+            data-animate="header" 
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-8"
+          >
+            <span className="block">Our Solutions</span>
+            <span className="block bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent mt-2">
+              & Services
+            </span>
+          </h2>
+          
+          <div className="flex gap-4 justify-center items-center mb-8" data-animate="header">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#F47D11]/50" />
+            <div className="w-2 h-2 rounded-full bg-[#F47D11]/60" />
+            <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#F47D11]/50" />
           </div>
 
-          <h2 data-animate="header" className="mt-6 text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight">
-            Our Solutions & Services
-          </h2>
-          <p data-animate="header" className="mt-4 text-gray-300 text-base sm:text-lg leading-relaxed">
-            At SysUp360, we don't just provide IT services — we tailor solutions that grow with your business. Our diverse team brings together a wide range of technical expertise, giving us the flexibility and edge to deliver exactly what you need, when you need it. From quick support fixes for small businesses to full-scale deployments and enterprise rollouts, we approach every project with precision, urgency, and professionalism. Ready to take your IT to the next level? Explore our offerings below and see how SysUp360 can keep your business moving forward.
-          </p>
+          <div 
+            data-animate="header" 
+            className="mx-auto space-y-6 max-w-4xl"
+          >
+            <p className="text-lg leading-relaxed text-gray-300 sm:text-xl">
+              At SysUp360, we don't just provide IT services — we tailor solutions that grow with your business. Our diverse team brings together a wide range of technical expertise, giving us the flexibility and edge to deliver exactly what you need, when you need it.
+            </p>
+            
+            <p className="text-lg leading-relaxed text-gray-300 sm:text-xl">
+              From quick support fixes for small businesses to full-scale deployments and enterprise rollouts, we approach every project with <span className="text-[#F47D11] font-semibold">precision</span>, <span className="text-[#F47D11] font-semibold">urgency</span>, and <span className="text-[#F47D11] font-semibold">professionalism</span>.
+            </p>
+            
+            <p className="text-lg font-medium leading-relaxed text-gray-200 sm:text-xl">
+              Ready to take your IT to the next level? Explore our offerings below and see how SysUp360 can keep your business moving forward.
+            </p>
+          </div>
         </div>
 
         {/* Marquee */}
-        <div className="relative overflow-hidden rounded-2xl border border-gray-800/60 bg-gray-900/20 backdrop-blur-md" data-reveal="clip">
+        <div className="overflow-hidden relative rounded-2xl border backdrop-blur-md border-gray-800/60 bg-gray-900/20" data-reveal="clip">
           <div className="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_20%_30%,rgba(244,125,17,0.12),transparent_40%),radial-gradient(circle_at_80%_60%,rgba(244,115,58,0.10),transparent_40%)]" />
           <div className="relative py-4">
             <motion.div
@@ -724,7 +686,7 @@ const Features = () => {
               {[...serviceMarquee, ...serviceMarquee].map((s, idx) => (
                 <span
                   key={`${s}-${idx}`}
-                  className="px-4 py-2 rounded-full border border-gray-800/60 bg-gray-950/20 text-sm text-gray-300"
+                  className="px-4 py-2 text-sm text-gray-300 rounded-full border border-gray-800/60 bg-gray-950/20"
                 >
                   <span className="text-[#F47D11]">•</span> {s}
                 </span>
@@ -736,7 +698,7 @@ const Features = () => {
         {/* Horizontal Scroll Section */}
         <div 
           ref={horizontalScrollRef} 
-          className="relative w-full h-screen flex items-center overflow-hidden"
+          className="flex overflow-hidden relative items-center w-full h-screen"
           style={{ minHeight: '100vh' }}
         >
           <div
@@ -757,7 +719,7 @@ const Features = () => {
               >
                 <SolutionsCard
                   item={item}
-                  isOpen={openId === item.id}
+                  isOpen={true}
                   isInView={inViewId === item.id}
                 />
               </div>
@@ -766,7 +728,7 @@ const Features = () => {
         </div>
 
         {/* Bottom promise row */}
-        <div className="mt-14 grid lg:grid-cols-3 gap-6" data-reveal="stagger">
+        <div className="grid gap-6 mt-14 lg:grid-cols-3" data-reveal="stagger">
           {[
             {
               title: 'Secure by design',
@@ -783,11 +745,11 @@ const Features = () => {
           ].map((p) => (
             <div
               key={p.title}
-              className="rounded-2xl border border-gray-800/60 bg-gray-900/20 backdrop-blur-md p-6"
+              className="p-6 rounded-2xl border backdrop-blur-md border-gray-800/60 bg-gray-900/20"
               data-reveal-child
             >
-              <div className="text-white font-semibold">{p.title}</div>
-              <div className="mt-2 text-sm text-gray-300 leading-relaxed">{p.body}</div>
+              <div className="font-semibold text-white">{p.title}</div>
+              <div className="mt-2 text-sm leading-relaxed text-gray-300">{p.body}</div>
             </div>
           ))}
         </div>
