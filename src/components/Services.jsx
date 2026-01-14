@@ -11,10 +11,848 @@ import {
   Code, 
   Users, 
   Cloud, 
-  Globe 
+  Globe,
+  Radio,
+  Server,
+  Router,
+  FileCode,
+  Terminal,
+  GitBranch,
+  Layers,
+  Globe2,
+  Mail,
+  Monitor
 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Custom Animated Illustration Component for each service
+const ServiceIllustration = ({ serviceId }) => {
+  const illustrations = {
+    'call-center': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        {/* Background grid */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central Headphones */}
+        <motion.div
+          className="relative z-10"
+          animate={{ y: [0, -8, 0], rotate: [0, 2, -2, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 shadow-2xl">
+            <Headphones className="w-16 h-16 text-[#F47D11]" strokeWidth={2} />
+          </div>
+        </motion.div>
+
+        {/* Sound waves radiating outward */}
+        {[0, 60, 120, 180, 240, 300].map((angle, i) => {
+          const radius = 80;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={i}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                className="w-12 h-1 bg-gradient-to-r from-transparent via-[#F47D11] to-transparent rounded-full"
+                animate={{
+                  scale: [0.5, 1.5, 0.5],
+                  opacity: [0.3, 0.8, 0.3],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.1,
+                }}
+              />
+            </motion.div>
+          );
+        })}
+
+        {/* Call indicators */}
+        {[0, 90, 180, 270].map((angle, i) => {
+          const radius = 100;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={`call-${i}`}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                animate={{
+                  scale: [1, 1.3, 1],
+                  opacity: [0.6, 1, 0.6],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.2,
+                }}
+              >
+                <Phone className="w-5 h-5 text-[#F47D11]" strokeWidth={2.5} />
+              </motion.div>
+            </motion.div>
+          );
+        })}
+      </div>
+    ),
+
+    'ussd': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central Phone */}
+        <motion.div
+          className="relative z-10"
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 shadow-2xl">
+            <Smartphone className="w-16 h-16 text-[#F47D11]" strokeWidth={2} />
+          </div>
+        </motion.div>
+
+        {/* Signal waves */}
+        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
+          const radius = 70 + (i % 3) * 15;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={i}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                className="w-2 h-2 bg-[#F47D11] rounded-full"
+                animate={{
+                  scale: [1, 2, 1],
+                  opacity: [0.5, 1, 0.5],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.15,
+                }}
+              />
+            </motion.div>
+          );
+        })}
+
+        {/* USSD Menu indicators */}
+        {[0, 120, 240].map((angle, i) => {
+          const radius = 110;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={`menu-${i}`}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                className="px-3 py-1.5 rounded-lg bg-gray-800/80 border border-[#F47D11]/40 backdrop-blur-sm"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  opacity: [0.7, 1, 0.7],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.3,
+                }}
+              >
+                <Radio className="w-4 h-4 text-[#F47D11]" strokeWidth={2} />
+              </motion.div>
+            </motion.div>
+          );
+        })}
+      </div>
+    ),
+
+    'networking': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central Hub */}
+        <motion.div
+          className="relative z-10 w-20 h-20 rounded-full border-4 border-[#F47D11]/50 bg-gradient-to-br from-[#F47D11]/20 to-[#F4733A]/10"
+          animate={{ scale: [1, 1.05, 1], rotate: [0, 360] }}
+          transition={{ scale: { duration: 3, repeat: Infinity }, rotate: { duration: 20, repeat: Infinity, ease: 'linear' } }}
+        >
+          <div className="flex absolute inset-0 justify-center items-center">
+            <Network className="w-8 h-8 text-[#F47D11]" strokeWidth={2.5} />
+          </div>
+        </motion.div>
+
+        {/* Network Nodes */}
+        {[0, 60, 120, 180, 240, 300].map((angle, i) => {
+          const radius = 100;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <React.Fragment key={i}>
+              {/* Connection Line */}
+              <div
+                className="absolute w-px bg-gradient-to-b from-transparent via-[#F47D11]/30 to-transparent"
+                style={{
+                  height: `${radius}px`,
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+                  transformOrigin: 'top center',
+                }}
+              />
+              
+              {/* Node */}
+              <motion.div
+                className="absolute"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                }}
+              >
+                <motion.div
+                  className="relative -translate-x-1/2 -translate-y-1/2"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: i * 0.15,
+                  }}
+                >
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-2 border-[#F47D11]/40 backdrop-blur-sm">
+                    <Router className="w-5 h-5 text-[#F47D11]" strokeWidth={2} />
+                  </div>
+                  <motion.div
+                    className="absolute inset-0 rounded-xl bg-[#F47D11]/30 blur-md -z-10"
+                    animate={{
+                      opacity: [0.3, 0.6, 0.3],
+                      scale: [1, 1.3, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: 'easeInOut',
+                      delay: i * 0.15,
+                    }}
+                  />
+                </motion.div>
+              </motion.div>
+            </React.Fragment>
+          );
+        })}
+
+        {/* Data flow particles */}
+        {[...Array(8)].map((_, i) => {
+          const angle = (i * 45) * Math.PI / 180;
+          const radius = 60 + (i % 3) * 20;
+          return (
+            <motion.div
+              key={`particle-${i}`}
+              className="absolute w-1.5 h-1.5 bg-[#F47D11] rounded-full"
+              style={{
+                left: '50%',
+                top: '50%',
+              }}
+              animate={{
+                x: [0, Math.cos(angle) * radius, Math.cos(angle) * radius * 1.5],
+                y: [0, Math.sin(angle) * radius, Math.sin(angle) * radius * 1.5],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: i * 0.2,
+              }}
+            />
+          );
+        })}
+      </div>
+    ),
+
+    'pbx': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central PBX System */}
+        <motion.div
+          className="relative z-10"
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 shadow-2xl">
+            <Phone className="w-16 h-16 text-[#F47D11]" strokeWidth={2} />
+          </div>
+        </motion.div>
+
+        {/* Extension lines and phones */}
+        {[0, 72, 144, 216, 288].map((angle, i) => {
+          const radius = 90;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <React.Fragment key={i}>
+              <div
+                className="absolute w-px bg-gradient-to-b from-transparent via-[#F47D11]/25 to-transparent"
+                style={{
+                  height: `${radius}px`,
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+                  transformOrigin: 'top center',
+                }}
+              />
+              <motion.div
+                className="absolute"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                }}
+              >
+                <motion.div
+                  className="relative -translate-x-1/2 -translate-y-1/2"
+                  animate={{
+                    scale: [1, 1.15, 1],
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                    delay: i * 0.2,
+                  }}
+                >
+                  <div className="p-2.5 rounded-lg bg-gray-800/80 border border-[#F47D11]/40">
+                    <Phone className="w-4 h-4 text-[#F47D11]" strokeWidth={2.5} />
+                  </div>
+                </motion.div>
+              </motion.div>
+            </React.Fragment>
+          );
+        })}
+
+        {/* Call routing indicators */}
+        {[...Array(6)].map((_, i) => {
+          const angle = (i * 60) * Math.PI / 180;
+          return (
+            <motion.div
+              key={`route-${i}`}
+              className="absolute w-1 h-1 bg-[#F47D11] rounded-full"
+              style={{
+                left: '50%',
+                top: '50%',
+              }}
+              animate={{
+                x: [0, Math.cos(angle) * 60, Math.cos(angle) * 100],
+                y: [0, Math.sin(angle) * 60, Math.sin(angle) * 100],
+                opacity: [0, 1, 0],
+                scale: [0.5, 1.5, 0.5],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: i * 0.3,
+              }}
+            />
+          );
+        })}
+      </div>
+    ),
+
+    'dr': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central Shield */}
+        <motion.div
+          className="relative z-10"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 shadow-2xl">
+            <Shield className="w-16 h-16 text-[#F47D11]" strokeWidth={2} />
+          </div>
+        </motion.div>
+
+        {/* Backup systems - dual redundancy */}
+        {[0, 120, 240].map((angle, i) => {
+          const radius = 100;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={i}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                className="relative -translate-x-1/2 -translate-y-1/2"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.7, 1, 0.7],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.25,
+                }}
+              >
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-2 border-[#F47D11]/40 backdrop-blur-sm">
+                  <Server className="w-5 h-5 text-[#F47D11]" strokeWidth={2} />
+                </div>
+                {/* Connection line */}
+                <div
+                  className="absolute w-px h-20 bg-gradient-to-b from-[#F47D11]/30 to-transparent"
+                  style={{
+                    left: '50%',
+                    bottom: '100%',
+                    transform: 'translateX(-50%)',
+                  }}
+                />
+              </motion.div>
+            </motion.div>
+          );
+        })}
+
+        {/* Failover indicators */}
+        {[...Array(4)].map((_, i) => {
+          const angle = (i * 90) * Math.PI / 180;
+          return (
+            <motion.div
+              key={`failover-${i}`}
+              className="absolute w-2 h-2 bg-[#F47D11] rounded-full"
+              style={{
+                left: '50%',
+                top: '50%',
+              }}
+              animate={{
+                x: [0, Math.cos(angle) * 80],
+                y: [0, Math.sin(angle) * 80],
+                opacity: [0, 1, 0],
+                scale: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: i * 0.4,
+              }}
+            />
+          );
+        })}
+      </div>
+    ),
+
+    'dev': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central Code Icon */}
+        <motion.div
+          className="relative z-10"
+          animate={{ rotate: [0, 5, -5, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 shadow-2xl">
+            <Code className="w-16 h-16 text-[#F47D11]" strokeWidth={2} />
+          </div>
+        </motion.div>
+
+        {/* Development tools orbiting */}
+        {[
+          { Icon: FileCode, angle: 0 },
+          { Icon: Terminal, angle: 72 },
+          { Icon: GitBranch, angle: 144 },
+          { Icon: Layers, angle: 216 },
+          { Icon: Monitor, angle: 288 },
+        ].map(({ Icon, angle }, i) => {
+          const radius = 95;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={i}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                className="relative -translate-x-1/2 -translate-y-1/2"
+                animate={{
+                  scale: [1, 1.25, 1],
+                  rotate: [0, 360],
+                }}
+                transition={{
+                  scale: { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 },
+                  rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
+                }}
+              >
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-2 border-[#F47D11]/40 backdrop-blur-sm">
+                  <Icon className="w-5 h-5 text-[#F47D11]" strokeWidth={2} />
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })}
+
+        {/* Code syntax particles */}
+        {[...Array(10)].map((_, i) => (
+          <motion.div
+            key={`syntax-${i}`}
+            className="absolute text-[#F47D11] text-xs font-mono"
+            style={{
+              left: `${20 + (i * 8)}%`,
+              top: `${15 + (i % 4) * 25}%`,
+            }}
+            animate={{
+              opacity: [0, 1, 0],
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: i * 0.15,
+            }}
+          >
+            {['<', '/', '>', '{', '}', '(', ')', ';', '=', '['][i % 10]}
+          </motion.div>
+        ))}
+      </div>
+    ),
+
+    'care': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central Team Icon */}
+        <motion.div
+          className="relative z-10"
+          animate={{ y: [0, -5, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 shadow-2xl">
+            <Users className="w-16 h-16 text-[#F47D11]" strokeWidth={2} />
+          </div>
+        </motion.div>
+
+        {/* Support team members */}
+        {[0, 72, 144, 216, 288].map((angle, i) => {
+          const radius = 90;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={i}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                className="relative -translate-x-1/2 -translate-y-1/2"
+                animate={{
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.2,
+                }}
+              >
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-2 border-[#F47D11]/40 backdrop-blur-sm">
+                  <Users className="w-5 h-5 text-[#F47D11]" strokeWidth={2} />
+                </div>
+                {/* Connection to center */}
+                <div
+                  className="absolute w-px bg-gradient-to-b from-[#F47D11]/20 to-transparent"
+                  style={{
+                    height: `${radius}px`,
+                    left: '50%',
+                    bottom: '100%',
+                    transform: `translateX(-50%) rotate(${-angle}deg)`,
+                    transformOrigin: 'bottom center',
+                  }}
+                />
+              </motion.div>
+            </motion.div>
+          );
+        })}
+
+        {/* Support indicators */}
+        {[...Array(6)].map((_, i) => {
+          const angle = (i * 60) * Math.PI / 180;
+          return (
+            <motion.div
+              key={`support-${i}`}
+              className="absolute w-1.5 h-1.5 bg-[#F47D11] rounded-full"
+              style={{
+                left: '50%',
+                top: '50%',
+              }}
+              animate={{
+                x: [0, Math.cos(angle) * 70, Math.cos(angle) * 110],
+                y: [0, Math.sin(angle) * 70, Math.sin(angle) * 110],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: i * 0.3,
+              }}
+            />
+          );
+        })}
+      </div>
+    ),
+
+    'vps': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central Cloud */}
+        <motion.div
+          className="relative z-10"
+          animate={{ y: [0, -6, 0], scale: [1, 1.02, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 shadow-2xl">
+            <Cloud className="w-16 h-16 text-[#F47D11]" strokeWidth={2} />
+          </div>
+        </motion.div>
+
+        {/* Server clusters */}
+        {[0, 90, 180, 270].map((angle, i) => {
+          const radius = 100;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={i}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                className="relative -translate-x-1/2 -translate-y-1/2"
+                animate={{
+                  scale: [1, 1.15, 1],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.2,
+                }}
+              >
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-2 border-[#F47D11]/40 backdrop-blur-sm">
+                  <Server className="w-5 h-5 text-[#F47D11]" strokeWidth={2} />
+                </div>
+                {/* Connection line */}
+                <div
+                  className="absolute w-px h-20 bg-gradient-to-b from-[#F47D11]/25 to-transparent"
+                  style={{
+                    left: '50%',
+                    bottom: '100%',
+                    transform: 'translateX(-50%)',
+                  }}
+                />
+              </motion.div>
+            </motion.div>
+          );
+        })}
+
+        {/* Data flow */}
+        {[...Array(8)].map((_, i) => {
+          const angle = (i * 45) * Math.PI / 180;
+          return (
+            <motion.div
+              key={`data-${i}`}
+              className="absolute w-1.5 h-1.5 bg-[#F47D11] rounded-full"
+              style={{
+                left: '50%',
+                top: '50%',
+              }}
+              animate={{
+                x: [0, Math.cos(angle) * 80, Math.cos(angle) * 120],
+                y: [0, Math.sin(angle) * 80, Math.sin(angle) * 120],
+                opacity: [0, 1, 0],
+                scale: [0.5, 1.5, 0.5],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: i * 0.2,
+              }}
+            />
+          );
+        })}
+      </div>
+    ),
+
+    'web': (
+      <div className="flex relative justify-center items-center w-full h-full">
+        <div className="absolute inset-0 opacity-10">
+          <div className="w-full h-full bg-[linear-gradient(rgba(244,125,17,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,0.3)_1px,transparent_1px)] bg-[size:30px_30px]" />
+        </div>
+        
+        {/* Central Globe */}
+        <motion.div
+          className="relative z-10"
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+        >
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 shadow-2xl">
+            <Globe className="w-16 h-16 text-[#F47D11]" strokeWidth={2} />
+          </div>
+        </motion.div>
+
+        {/* Web elements */}
+        {[
+          { Icon: Globe2, angle: 0 },
+          { Icon: Mail, angle: 90 },
+          { Icon: Monitor, angle: 180 },
+          { Icon: Layers, angle: 270 },
+        ].map(({ Icon, angle }, i) => {
+          const radius = 95;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          return (
+            <motion.div
+              key={i}
+              className="absolute"
+              style={{
+                left: '50%',
+                top: '50%',
+                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+              }}
+            >
+              <motion.div
+                className="relative -translate-x-1/2 -translate-y-1/2"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  y: [0, -5, 0],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: i * 0.2,
+                }}
+              >
+                <div className="p-3 rounded-xl bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-2 border-[#F47D11]/40 backdrop-blur-sm">
+                  <Icon className="w-5 h-5 text-[#F47D11]" strokeWidth={2} />
+                </div>
+                {/* Connection line */}
+                <div
+                  className="absolute w-px h-20 bg-gradient-to-b from-[#F47D11]/25 to-transparent"
+                  style={{
+                    left: '50%',
+                    bottom: '100%',
+                    transform: 'translateX(-50%)',
+                  }}
+                />
+              </motion.div>
+            </motion.div>
+          );
+        })}
+
+        {/* Digital presence indicators */}
+        {[...Array(6)].map((_, i) => {
+          const angle = (i * 60) * Math.PI / 180;
+          return (
+            <motion.div
+              key={`web-${i}`}
+              className="absolute w-1.5 h-1.5 bg-[#F47D11] rounded-full"
+              style={{
+                left: '50%',
+                top: '50%',
+              }}
+              animate={{
+                x: [0, Math.cos(angle) * 70, Math.cos(angle) * 110],
+                y: [0, Math.sin(angle) * 70, Math.sin(angle) * 110],
+                opacity: [0, 1, 0],
+                scale: [1, 1.8, 1],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: i * 0.25,
+              }}
+            />
+          );
+        })}
+      </div>
+    ),
+  };
+
+  return illustrations[serviceId] || <div />;
+};
 
 const Services = () => {
   const sectionRef = useRef(null);
@@ -391,125 +1229,26 @@ const Services = () => {
                         ))}
                       </div>
 
-                      {/* Animated Icon Display */}
+                      {/* Custom Animated Illustration */}
                       <motion.div
-                        className="relative overflow-hidden rounded-xl border border-[#F47D11]/20 bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-12 sm:p-16 flex items-center justify-center"
+                        className="relative overflow-hidden rounded-xl border border-[#F47D11]/20 bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-12 sm:p-16"
+                        style={{ minHeight: '300px' }}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
                       >
-                        {/* Background effects */}
-                        <motion.div
-                          className="absolute inset-0 opacity-20"
-                          style={{
-                            background: 'radial-gradient(circle at 50% 50%, rgba(244,125,17,0.3), transparent 70%)',
-                          }}
-                          animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.2, 0.3, 0.2],
-                          }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: 'easeInOut',
-                          }}
-                        />
-                        
-                        {/* Animated concentric circles */}
-                        {[...Array(3)].map((_, i) => (
-                          <motion.div
-                            key={i}
-                            className="absolute rounded-full border border-[#F47D11]/20"
-                            style={{
-                              width: `${120 + i * 60}px`,
-                              height: `${120 + i * 60}px`,
-                            }}
-                            animate={{
-                              scale: [1, 1.15, 1],
-                              opacity: [0.3, 0.1, 0.3],
-                              rotate: [0, 180, 360],
-                            }}
-                            transition={{
-                              duration: 4 + i,
-                              repeat: Infinity,
-                              ease: 'easeInOut',
-                              delay: i * 0.3,
-                            }}
-                          />
-                        ))}
-
-                        {/* Large animated icon */}
                         <AnimatePresence mode="wait">
                           <motion.div
                             key={item.id}
-                            className="relative z-10"
-                            initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
-                            animate={{ 
-                              opacity: 1, 
-                              scale: 1, 
-                              rotate: 0,
-                            }}
-                            exit={{ opacity: 0, scale: 0.5, rotate: 180 }}
-                            transition={{ duration: 0.6, ease: 'backOut' }}
+                            className="w-full h-full"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.5, ease: 'easeOut' }}
                           >
-                            <motion.div
-                              animate={{
-                                y: [0, -10, 0],
-                                rotate: [0, 5, -5, 0],
-                              }}
-                              transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                ease: 'easeInOut',
-                              }}
-                            >
-                              <div className="relative p-8 rounded-2xl bg-gradient-to-br from-[#F47D11]/20 to-[#F4733A]/20 border-2 border-[#F47D11]/40 shadow-2xl shadow-[#F47D11]/20">
-                                <item.icon
-                                  className="w-24 h-24 sm:w-32 sm:h-32 text-[#F47D11]"
-                                  strokeWidth={1.5}
-                                />
-                                
-                                {/* Pulsing glow effect */}
-                                <motion.div
-                                  className="absolute inset-0 rounded-2xl bg-[#F47D11]/20 blur-xl"
-                                  animate={{
-                                    opacity: [0.3, 0.6, 0.3],
-                                    scale: [1, 1.05, 1],
-                                  }}
-                                  transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                    ease: 'easeInOut',
-                                  }}
-                                />
-                              </div>
-                            </motion.div>
+                            <ServiceIllustration serviceId={item.id} />
                           </motion.div>
                         </AnimatePresence>
-
-                        {/* Floating particles */}
-                        {[...Array(6)].map((_, i) => (
-                          <motion.div
-                            key={i}
-                            className="absolute w-2 h-2 bg-[#F47D11] rounded-full opacity-60"
-                            style={{
-                              left: `${20 + (i * 12)}%`,
-                              top: `${30 + (i % 3) * 20}%`,
-                            }}
-                            animate={{
-                              y: [0, -20, 0],
-                              x: [0, Math.sin(i) * 10, 0],
-                              opacity: [0.6, 0.2, 0.6],
-                              scale: [1, 1.5, 1],
-                            }}
-                            transition={{
-                              duration: 3 + i * 0.5,
-                              repeat: Infinity,
-                              ease: 'easeInOut',
-                              delay: i * 0.2,
-                            }}
-                          />
-                        ))}
                       </motion.div>
                     </motion.div>
                   ) : (
