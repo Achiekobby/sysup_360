@@ -174,7 +174,7 @@ const AboutStory = () => {
 
           <h2 
             data-animate="about" 
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-8"
           >
             <span className="block">About</span>
             <span className="block bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent mt-2">

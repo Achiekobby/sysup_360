@@ -199,6 +199,7 @@ const Hero = () => {
       "Contact Center",
       "Managed Services",
       "Bulk SMS",
+      "Bulk Voice",
       "USSD Services",
       "Cloud & VPS",
       "Managed IT",
@@ -258,7 +259,7 @@ const Hero = () => {
           "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
         position: "relative",
         zIndex: 1,
-        paddingTop: "clamp(1rem, 2vh, 2rem)",
+        paddingTop: "clamp(0.25rem, 0.5vh, 0.5rem)",
         paddingBottom: "clamp(2rem, 5vh, 4rem)",
       }}
     >
@@ -345,7 +346,7 @@ const Hero = () => {
 
       {/* Main Content */}
       <motion.div
-        className="relative z-20 px-6 pt-4 pb-8 mx-auto max-w-8xl lg:px-12 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-16"
+        className="relative z-20 px-6 pt-0 pb-8 mx-auto max-w-8xl lg:px-12 sm:pt-2 sm:pb-12 lg:pt-4 lg:pb-16"
         style={{
           opacity: opacity,
           scale: scale,
@@ -355,7 +356,7 @@ const Hero = () => {
       >
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start lg:items-center min-h-0 lg:min-h-[75vh]">
           {/* Left Content */}
-          <div className="relative z-30 mt-0 space-y-4 text-center lg:text-left sm:space-y-5 lg:space-y-6">
+          <div className="relative z-30 -mt-6 space-y-4 text-center lg:text-left sm:-mt-8 sm:space-y-5 lg:-mt-12 lg:space-y-6">
             {/* Title */}
             <div ref={titleRef} className="space-y-1 sm:space-y-2" data-reveal="tilt">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.15]">
@@ -410,11 +411,52 @@ const Hero = () => {
                 </div>
                 <div className="block title-line">
                   <span className="text-white">
-                    we make IT happen
+                    we make{" "}
+                    <span
+                      className="relative z-10 font-black"
+                      style={{
+                        background: "linear-gradient(135deg, #F47D11 0%, #FF9500 50%, #F4733A 100%)",
+                        backgroundClip: "text",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        filter: "drop-shadow(0 0 8px rgba(244, 125, 17, 0.6))",
+                      }}
+                    >
+                      IT
+                    </span>{" "}
+                    happen
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-2 justify-center items-center mt-3 text-2xl font-light title-line text-white/90 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:mt-4 lg:mt-5 lg:justify-start sm:gap-3">
-                  <span>with our 360</span>
+                  <span>
+                    with our 360
+                    <motion.span
+                      className="inline-flex items-baseline ml-0.5 font-bold"
+                      style={{
+                        color: "#D85F08",
+                        fontSize: "1.35em",
+                        filter: "drop-shadow(0 0 6px rgba(216, 95, 8, 0.6))",
+                      }}
+                      aria-hidden
+                    >
+                      {[0, 1, 2].map((i) => (
+                        <motion.span
+                          key={i}
+                          animate={{
+                            opacity: [0.4, 1, 0.4],
+                          }}
+                          transition={{
+                            duration: 1.2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: i * 0.2,
+                          }}
+                        >
+                          .
+                        </motion.span>
+                      ))}
+                    </motion.span>
+                  </span>
                   <span className="relative inline-block min-w-[250px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] text-left h-[1.2em] overflow-visible">
                     <motion.span
                       className="inline-block relative z-30 font-bold tracking-wide uppercase"
@@ -453,7 +495,7 @@ const Hero = () => {
                         repeat={Infinity}
                         deletionSpeed={25}
                         speed={40}
-                        cursor={false}
+                        cursor={true}
                         wrapper="span"
                         style={{
                           fontSize: "inherit",

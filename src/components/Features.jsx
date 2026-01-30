@@ -544,7 +544,8 @@ const Features = () => {
         }
       }
 
-      // Slow rotating background logo
+      // Background logo: circular spinning + scroll-driven movement
+      const bgLogoWrap = sectionRef.current?.querySelector('[data-bg-wrap="logo"]');
       const bgLogo = sectionRef.current?.querySelector('[data-bg="logo"]');
       if (bgLogo) {
         gsap.to(bgLogo, {
@@ -554,6 +555,23 @@ const Features = () => {
           ease: 'none',
           transformOrigin: 'center center',
         });
+      }
+      if (bgLogoWrap) {
+        gsap.fromTo(
+          bgLogoWrap,
+          { y: 120 },
+          {
+            y: -120,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
       }
     }, sectionRef);
 
@@ -576,7 +594,7 @@ const Features = () => {
       <div id="features" className="absolute -top-24" />
 
       {/* Background (match Hero) */}
-      <div className="overflow-hidden absolute inset-0">
+      <div className="overflow-hidden absolute inset-0 z-0">
         {/* Hero-like orbs */}
         <motion.div
           className="absolute top-20 right-20 w-96 h-96 rounded-full opacity-70 blur-3xl"
@@ -597,14 +615,18 @@ const Features = () => {
           transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
         />
 
-        {/* Subtle 360 logo in the back */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.06]">
+        {/* Faded glassmorphism + spinning 360 logo with scroll movement */}
+        <div
+          data-bg-wrap="logo"
+          className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none"
+        >
+          <div className="absolute w-[900px] h-[900px] rounded-full backdrop-blur-2xl bg-gray-900/50 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" aria-hidden="true" />
           <img
             src="/images/360-colour.png"
             alt=""
             aria-hidden="true"
             data-bg="logo"
-            className="w-[860px] h-[860px] object-contain"
+            className="relative w-[860px] h-[860px] object-contain opacity-[0.035]"
           />
         </div>
 
@@ -642,7 +664,7 @@ const Features = () => {
 
           <h2 
             data-animate="header" 
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-8"
           >
             <span className="block">Our Solutions</span>
             <span className="block bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent mt-2">

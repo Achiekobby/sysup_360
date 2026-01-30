@@ -22,8 +22,13 @@ const Earth = ({
   const phiRef = useRef(0);
   const lastTimeRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [ghanaPosition, setGhanaPosition] = useState({ x: 50, y: 50, visible: true });
   const resizeObserverRef = useRef(null);
   const resizeTimeoutRef = useRef(null);
+
+  // Ghana coordinates
+  const GHANA_LAT = 7.9465;
+  const GHANA_LON = -1.0232;
 
   // Helper function to get canvas dimensions
   const getCanvasSize = () => {
@@ -85,7 +90,13 @@ const Earth = ({
             glowColor: glowColor,
             opacity: 1,
             offset: [0, 0],
-            markers: [],
+            markers: [
+              { location: [GHANA_LAT, GHANA_LON], size: 0.15 }, // Ghana - main marker (large)
+              { location: [GHANA_LAT, GHANA_LON], size: 0.08 }, // Ghana - inner glow
+              { location: [GHANA_LAT + 0.05, GHANA_LON - 0.05], size: 0.05 }, // Ghana - cluster dot 1
+              { location: [GHANA_LAT - 0.03, GHANA_LON + 0.04], size: 0.05 }, // Ghana - cluster dot 2
+              { location: [GHANA_LAT - 0.07, GHANA_LON - 0.06], size: 0.04 }, // Ghana - cluster dot 3
+            ],
             onRender: (state) => {
               // Use refs to maintain continuous rotation across renders
               const now = performance.now();
@@ -104,6 +115,40 @@ const Earth = ({
               }
               
               state.phi = phiRef.current;
+
+              // Calculate Ghana marker position in 2D screen space
+              const ghanaLatRad = (GHANA_LAT * Math.PI) / 180;
+              const ghanaLonRad = (GHANA_LON * Math.PI) / 180;
+
+              // Convert lat/lon to 3D coordinates on sphere
+              const cosPhi = Math.cos(ghanaLatRad);
+              const x = cosPhi * Math.cos(ghanaLonRad + state.phi);
+              const y = Math.sin(ghanaLatRad);
+              const z = cosPhi * Math.sin(ghanaLonRad + state.phi);
+
+              if (canvasRef.current) {
+                const canvasWidth = canvasRef.current.offsetWidth;
+                const canvasHeight = canvasRef.current.offsetHeight;
+                
+                // Apply scale and theta rotation
+                const cosTheta = Math.cos(state.theta);
+                const sinTheta = Math.sin(state.theta);
+                const rotatedY = y * cosTheta - z * sinTheta;
+                const rotatedZ = y * sinTheta + z * cosTheta;
+
+                // Check if Ghana is on the visible side (rotatedZ > 0 means facing us after theta rotation)
+                const isVisible = rotatedZ > -0.2; // Small threshold for edge visibility
+
+                // Project to screen coordinates (center of canvas + scaled position)
+                const screenX = ((x * state.scale) / 2 + 0.5) * canvasWidth;
+                const screenY = ((rotatedY * state.scale) / 2 + 0.5) * canvasHeight;
+
+                setGhanaPosition({
+                  x: screenX,
+                  y: screenY,
+                  visible: isVisible,
+                });
+              }
             },
           });
           
@@ -186,25 +231,80 @@ const Earth = ({
     <div
       ref={containerRef}
       className={cn(
-        'flex items-center justify-center z-10 w-full max-w-[900px] mx-auto',
+        'flex items-center justify-center z-10 w-full max-w-[900px] mx-auto relative',
         className
       )}
       style={{ minWidth: '500px', minHeight: '500px' }}
     >
       {isMounted ? (
-        <canvas
-          ref={canvasRef}
-          style={{
-            width: '100%',
-            height: '100%',
-            maxWidth: '900px',
-            maxHeight: '900px',
-            aspectRatio: '1',
-            display: 'block',
-            minWidth: '500px',
-            minHeight: '500px',
-          }}
-        />
+        <>
+          <canvas
+            ref={canvasRef}
+            style={{
+              width: '100%',
+              height: '100%',
+              maxWidth: '900px',
+              maxHeight: '900px',
+              aspectRatio: '1',
+              display: 'block',
+              minWidth: '500px',
+              minHeight: '500px',
+            }}
+          />
+          
+          {/* Ghana Pin Label - positioned dynamically on globe */}
+          {ghanaPosition.visible && (
+            <div
+              className="absolute pointer-events-none z-30 transition-opacity duration-300"
+              style={{
+                left: `${ghanaPosition.x}px`,
+                top: `${ghanaPosition.y}px`,
+                transform: 'translate(-50%, -120%)', // Center horizontally, position above marker
+                opacity: ghanaPosition.visible ? 1 : 0,
+              }}
+            >
+              <div className="relative">
+                {/* Pulsing glow behind pin */}
+                <div
+                  className="absolute inset-0 rounded-full bg-gradient-to-r from-[#F47D11] to-[#F4733A] blur-lg opacity-60"
+                  style={{
+                    transform: 'scale(1.8)',
+                    animation: 'pulse-glow 2s ease-in-out infinite',
+                  }}
+                />
+                
+                {/* Pin badge */}
+                <div className="relative px-3 py-1.5 rounded-full bg-gradient-to-r from-[#F47D11] to-[#F4733A] border-2 border-white/30 shadow-2xl backdrop-blur-sm">
+                  <div className="flex items-center gap-1.5">
+                    <span
+                      className="text-lg"
+                      style={{
+                        animation: 'wave 2.5s ease-in-out infinite',
+                      }}
+                    >
+                      🇬🇭
+                    </span>
+                    <span className="text-white font-black text-xs tracking-widest drop-shadow-lg whitespace-nowrap">
+                      GHANA
+                    </span>
+                    <span
+                      className="w-1.5 h-1.5 rounded-full bg-white"
+                      style={{
+                        animation: 'pulse-dot 1.5s ease-in-out infinite',
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Connecting line pointing to marker */}
+                <svg className="absolute top-full left-1/2 -translate-x-1/2 w-0.5 h-8" viewBox="0 0 2 32">
+                  <line x1="1" y1="0" x2="1" y2="28" stroke="white" strokeWidth="2" opacity="0.5" strokeDasharray="1 1" />
+                  <circle cx="1" cy="30" r="1.5" fill="white" opacity="0.7" />
+                </svg>
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         <div 
           style={{ 

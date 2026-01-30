@@ -22,59 +22,63 @@ function useScanHeight(defaultHeight = 900) {
   return scanHeight;
 }
 
-const MiniSparkline = ({ points = [6, 10, 8, 12, 9, 14, 13] }) => {
-  const pathRef = useRef(null);
-
-  const d = useMemo(() => {
-    const w = 160;
-    const h = 46;
-    const min = Math.min(...points);
-    const max = Math.max(...points);
-    const range = Math.max(1, max - min);
-    const step = w / (points.length - 1);
-    const mapped = points.map((p, i) => {
-      const x = i * step;
-      const y = h - ((p - min) / range) * (h - 6) - 3;
-      return { x, y };
-    });
-    return mapped.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
-  }, [points]);
+// Full-width bar chart for telemetry cards
+const TelemetryBarChart = ({ points = [6, 10, 8, 12, 9, 14, 13] }) => {
+  const containerRef = useRef(null);
+  const barRefs = useRef([]);
+  const maxVal = useMemo(() => Math.max(...points, 1), [points]);
 
   useEffect(() => {
-    const path = pathRef.current;
-    if (!path) return undefined;
-
-    const len = path.getTotalLength();
-    path.style.strokeDasharray = `${len}`;
-    path.style.strokeDashoffset = `${len}`;
+    const card = containerRef.current?.closest('[data-telemetry-card="true"]');
+    if (!card) return undefined;
 
     const ctx = gsap.context(() => {
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        duration: 1.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: path.closest('[data-telemetry-card="true"]'),
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
-        },
-      });
-    }, pathRef);
+      const bars = barRefs.current.filter(Boolean);
+      gsap.fromTo(
+        bars,
+        { scaleY: 0, transformOrigin: 'bottom center' },
+        {
+          scaleY: 1,
+          duration: 0.8,
+          stagger: 0.06,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        }
+      );
+    }, card);
 
     return () => ctx.revert();
-  }, [d]);
+  }, [points, maxVal]);
 
   return (
-    <svg width="160" height="46" viewBox="0 0 160 46" className="opacity-90">
-      <defs>
-        <linearGradient id="spark" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
-          <stop stopColor={neon.a} stopOpacity="0.95" />
-          <stop offset="1" stopColor={neon.b} stopOpacity="0.9" />
-        </linearGradient>
-      </defs>
-      <path d={d} fill="none" stroke="url(#spark)" strokeWidth="3" strokeLinecap="round" ref={pathRef} />
-      <path d={`${d} L 160 46 L 0 46 Z`} fill={`url(#spark)`} opacity="0.08" />
-    </svg>
+    <div ref={containerRef} className="w-full flex items-end gap-1 sm:gap-1.5 h-12" aria-hidden="true">
+      {points.map((value, i) => {
+        const heightPct = (value / maxVal) * 100;
+        return (
+          <div
+            key={i}
+            className="flex-1 min-w-0 flex flex-col justify-end rounded-t"
+            style={{ height: '100%' }}
+          >
+            <motion.div
+              ref={(el) => { barRefs.current[i] = el; }}
+              className="w-full rounded-t min-h-[4px]"
+              style={{
+                height: `${heightPct}%`,
+                background: `linear-gradient(180deg, ${neon.a}, ${neon.b})`,
+                boxShadow: `0 0 12px rgba(244, 125, 17, 0.35)`,
+                transform: 'scaleY(0)',
+                transformOrigin: 'bottom center',
+              }}
+            />
+          </div>
+        );
+      })}
+    </div>
   );
 };
 
@@ -229,9 +233,9 @@ const TelemetryCard = ({ stat }) => {
           {stat.icon}
         </div>
       </div>
-      <div className="mt-5">
-        <MiniSparkline points={stat.spark} />
-    </div>
+      <div className="mt-5 w-full">
+        <TelemetryBarChart points={stat.spark} />
+      </div>
     </motion.div>
   );
 };
@@ -282,11 +286,11 @@ const ParallaxTechElements = () => {
 
   return (
     <>
-      {/* Circuit Board - top left */}
+      {/* Circuit Board - top left edge */}
       <div
         ref={circuit.ref}
-        className="absolute top-[8%] left-[5%] pointer-events-none hidden lg:block"
-        style={{ zIndex: 1 }}
+        className="absolute top-4 left-0 -translate-x-1/2 pointer-events-none hidden lg:block"
+        style={{ zIndex: 0 }}
       >
         <svg width="80" height="80" viewBox="0 0 80 80" fill="none" className="drop-shadow-[0_0_12px_rgba(244,125,17,0.4)]">
           <rect x="10" y="10" width="60" height="60" rx="4" stroke={neon.a} strokeWidth="2" fill="none" />
@@ -302,11 +306,11 @@ const ParallaxTechElements = () => {
         </svg>
       </div>
 
-      {/* Server Rack - top right */}
+      {/* Server Rack - top right edge */}
       <div
         ref={server.ref}
-        className="absolute top-[12%] right-[8%] pointer-events-none hidden lg:block"
-        style={{ zIndex: 1 }}
+        className="absolute top-4 right-0 translate-x-1/2 pointer-events-none hidden lg:block"
+        style={{ zIndex: 0 }}
       >
         <svg width="70" height="90" viewBox="0 0 70 90" fill="none" className="drop-shadow-[0_0_12px_rgba(244,115,58,0.4)]">
           <rect x="10" y="5" width="50" height="20" rx="2" stroke={neon.b} strokeWidth="2" fill="rgba(244,125,17,0.1)" />
@@ -321,11 +325,11 @@ const ParallaxTechElements = () => {
         </svg>
       </div>
 
-      {/* Network Node - middle left */}
+      {/* Network Node - middle left edge */}
       <div
         ref={network.ref}
-        className="absolute top-[45%] left-[3%] pointer-events-none hidden lg:block"
-        style={{ zIndex: 1 }}
+        className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
+        style={{ zIndex: 0 }}
       >
         <svg width="100" height="100" viewBox="0 0 100 100" fill="none" className="drop-shadow-[0_0_12px_rgba(244,125,17,0.4)]">
           <circle cx="50" cy="50" r="8" fill={neon.a} />
@@ -342,11 +346,11 @@ const ParallaxTechElements = () => {
         </svg>
       </div>
 
-      {/* Data Stream - middle right */}
+      {/* Data Stream - middle right edge */}
       <div
         ref={dataStream.ref}
-        className="absolute top-[50%] right-[4%] pointer-events-none hidden lg:block"
-        style={{ zIndex: 1 }}
+        className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
+        style={{ zIndex: 0 }}
       >
         <svg width="60" height="100" viewBox="0 0 60 100" fill="none" className="drop-shadow-[0_0_12px_rgba(244,115,58,0.4)]">
           <path d="M30 10 Q40 30 30 50 Q20 70 30 90" stroke={neon.b} strokeWidth="3" fill="none" opacity="0.7" />
@@ -360,11 +364,11 @@ const ParallaxTechElements = () => {
         </svg>
       </div>
 
-      {/* Security Shield - bottom left */}
+      {/* Security Shield - bottom left edge */}
       <div
         ref={shield.ref}
-        className="absolute bottom-[15%] left-[7%] pointer-events-none hidden lg:block"
-        style={{ zIndex: 1 }}
+        className="absolute bottom-4 left-0 -translate-x-1/2 pointer-events-none hidden lg:block"
+        style={{ zIndex: 0 }}
       >
         <svg width="75" height="85" viewBox="0 0 75 85" fill="none" className="drop-shadow-[0_0_12px_rgba(244,125,17,0.4)]">
           <path
@@ -378,11 +382,11 @@ const ParallaxTechElements = () => {
         </svg>
       </div>
 
-      {/* Cloud Icon - bottom right */}
+      {/* Cloud Icon - bottom right edge */}
       <div
         ref={cloud.ref}
-        className="absolute bottom-[18%] right-[6%] pointer-events-none hidden lg:block"
-        style={{ zIndex: 1 }}
+        className="absolute bottom-4 right-0 translate-x-1/2 pointer-events-none hidden lg:block"
+        style={{ zIndex: 0 }}
       >
         <svg width="90" height="60" viewBox="0 0 90 60" fill="none" className="drop-shadow-[0_0_12px_rgba(244,115,58,0.4)]">
           <path
@@ -409,20 +413,36 @@ const Stats = () => {
   const stats = useMemo(
     () => [
       {
-        kicker: 'Clients',
+        kicker: 'CLIENTS',
         label: 'Businesses supported across sectors',
-        value: 500,
+        value: 20,
         suffix: '+',
         icon: '👥',
         spark: [6, 9, 8, 12, 10, 13, 14],
       },
       {
-        kicker: 'Deployments',
+        kicker: 'DEPLOYMENTS',
         label: 'Projects shipped end‑to‑end',
-        value: 1000,
+        value: 60,
         suffix: '+',
         icon: '🚀',
         spark: [4, 8, 7, 10, 9, 12, 11],
+      },
+      {
+        kicker: 'SMS DELIVERED',
+        label: 'Bulk SMS messages delivered',
+        value: 500,
+        suffix: 'M+',
+        icon: '💬',
+        spark: [5, 9, 8, 11, 10, 12, 13],
+      },
+      {
+        kicker: 'VOICE CALLS DELIVERED',
+        label: 'Voice minutes and calls delivered',
+        value: 2,
+        suffix: 'M+',
+        icon: '📞',
+        spark: [6, 8, 9, 10, 11, 12, 11],
       },
       {
         kicker: 'Uptime',
@@ -500,89 +520,110 @@ const Stats = () => {
           </p>
         </div>
 
-        <div className="mt-12 grid lg:grid-cols-12 gap-6 items-start" data-reveal="stagger">
-          {/* Left: big gauge */}
-          <div className="lg:col-span-5">
-            <motion.div
-              data-telemetry-card="true"
-              className="relative overflow-hidden rounded-3xl border border-gray-800/60 bg-gray-950/20 backdrop-blur-md p-7"
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-              data-reveal-child
-            >
-              <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_20%_20%,rgba(244,125,17,0.16),transparent_45%),radial-gradient(circle_at_85%_65%,rgba(244,115,58,0.12),transparent_45%)]" />
-              <div className="relative">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-xs uppercase tracking-widest text-gray-400">System Status</div>
-                    <div className="mt-2 text-2xl font-black text-white">Operational readiness</div>
-                    <div className="mt-2 text-sm text-gray-300">
-                      Monitoring network, cloud, call center and DR signals.
-                    </div>
-                  </div>
-                  <div className="hidden sm:flex items-center gap-2 text-xs text-gray-400">
-                    <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                    all checks passing
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <RadialGauge value={97} label="Readiness" />
-                </div>
-
-                <div className="mt-6 grid grid-cols-3 gap-3">
-                  {[
-                    { k: 'Security', v: 'High' },
-                    { k: 'Latency', v: 'Low' },
-                    { k: 'Scale', v: 'Elastic' },
-                  ].map((t) => (
-                    <div key={t.k} className="rounded-2xl border border-gray-800/60 bg-gray-900/20 p-4">
-                      <div className="text-xs uppercase tracking-widest text-gray-400">{t.k}</div>
-                      <div className="mt-2 text-sm font-semibold text-white">{t.v}</div>
-                    </div>
-                  ))}
-                </div>
+        <div className="mt-12 space-y-6" data-reveal="stagger">
+          {/* Row 1: Left cards | Operational readiness (center) | Right cards */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-6 items-stretch">
+            {/* Left column: 2 cards stacked */}
+            <div className="lg:col-span-3 flex flex-col gap-6">
+              <div key={stats[0].kicker} data-reveal-child>
+                <TelemetryCard stat={stats[0]} />
               </div>
-            </motion.div>
+              <div key={stats[1].kicker} data-reveal-child>
+                <TelemetryCard stat={stats[1]} />
+              </div>
+            </div>
+
+            {/* Center: Operational readiness */}
+            <div className="lg:col-span-6">
+              <motion.div
+                data-telemetry-card="true"
+                className="relative overflow-hidden rounded-3xl border border-gray-800/60 bg-gray-950/20 backdrop-blur-md p-7 h-full min-h-[340px] flex flex-col justify-between"
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+                data-reveal-child
+              >
+                <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_20%_20%,rgba(244,125,17,0.16),transparent_45%),radial-gradient(circle_at_85%_65%,rgba(244,115,58,0.12),transparent_45%)]" />
+                <div className="relative">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-xs uppercase tracking-widest text-gray-400">System Status</div>
+                      <div className="mt-2 text-2xl font-black text-white">Operational readiness</div>
+                      <div className="mt-2 text-sm text-gray-300">
+                        Monitoring network, cloud, call center and DR signals.
+                      </div>
+                    </div>
+                    <div className="hidden sm:flex items-center gap-2 text-xs text-gray-400">
+                      <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                      all checks passing
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <RadialGauge value={97} label="Readiness" />
+                  </div>
+
+                  <div className="mt-6 grid grid-cols-3 gap-3">
+                    {[
+                      { k: 'Security', v: 'High' },
+                      { k: 'Latency', v: 'Low' },
+                      { k: 'Scale', v: 'Elastic' },
+                    ].map((t) => (
+                      <div key={t.k} className="rounded-2xl border border-gray-800/60 bg-gray-900/20 p-4">
+                        <div className="text-xs uppercase tracking-widest text-gray-400">{t.k}</div>
+                        <div className="mt-2 text-sm font-semibold text-white">{t.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right column: 2 cards stacked */}
+            <div className="lg:col-span-3 flex flex-col gap-6">
+              <div key={stats[2].kicker} data-reveal-child>
+                <TelemetryCard stat={stats[2]} />
+              </div>
+              <div key={stats[3].kicker} data-reveal-child>
+                <TelemetryCard stat={stats[3]} />
+              </div>
+            </div>
           </div>
 
-          {/* Right: telemetry cards */}
-          <div className="lg:col-span-7 grid sm:grid-cols-2 gap-6">
-            {stats.map((stat) => (
-              <div key={stat.kicker} data-reveal-child>
-                <TelemetryCard stat={stat} />
-              </div>
-            ))}
-
-            {/* A fourth “console strip” card */}
-            <motion.div
-              data-telemetry-card="true"
-              className="sm:col-span-2 relative overflow-hidden rounded-2xl border border-gray-800/60 bg-gray-950/20 backdrop-blur-md p-6"
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-              data-reveal-child
-            >
-              <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_20%_20%,rgba(244,125,17,0.16),transparent_45%),radial-gradient(circle_at_85%_65%,rgba(244,115,58,0.12),transparent_45%)]" />
-              <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <div className="text-xs uppercase tracking-widest text-gray-400">247Care</div>
-                  <div className="mt-2 text-xl font-black text-white">Always-on support</div>
-                  <div className="mt-2 text-sm text-gray-300">
-                    Ops monitoring, incident response, maintenance, and continuous improvement.
+          {/* Row 2: Uptime card + 247Care strip */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-6 items-stretch">
+            <div className="lg:col-span-4" data-reveal-child>
+              <TelemetryCard stat={stats[4]} />
+            </div>
+            <div className="lg:col-span-8">
+              <motion.div
+                data-telemetry-card="true"
+                className="relative overflow-hidden rounded-2xl border border-gray-800/60 bg-gray-950/20 backdrop-blur-md p-6 h-full"
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+                data-reveal-child
+              >
+                <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_20%_20%,rgba(244,125,17,0.16),transparent_45%),radial-gradient(circle_at_85%_65%,rgba(244,115,58,0.12),transparent_45%)]" />
+                <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <div className="text-xs uppercase tracking-widest text-gray-400">247Care</div>
+                    <div className="mt-2 text-xl font-black text-white">Always-on support</div>
+                    <div className="mt-2 text-sm text-gray-300">
+                      Ops monitoring, incident response, maintenance, and continuous improvement.
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="rounded-2xl border border-gray-800/60 bg-gray-900/20 px-5 py-4">
+                      <div className="text-xs text-gray-400">Coverage</div>
+                      <div className="text-white font-black text-2xl">24/7</div>
+                    </div>
+                    <div className="rounded-2xl border border-gray-800/60 bg-gray-900/20 px-5 py-4">
+                      <div className="text-xs text-gray-400">Response</div>
+                      <div className="text-white font-black text-2xl">&lt;1d</div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="rounded-2xl border border-gray-800/60 bg-gray-900/20 px-5 py-4">
-                    <div className="text-xs text-gray-400">Coverage</div>
-                    <div className="text-white font-black text-2xl">24/7</div>
-                  </div>
-                  <div className="rounded-2xl border border-gray-800/60 bg-gray-900/20 px-5 py-4">
-                    <div className="text-xs text-gray-400">Response</div>
-                    <div className="text-white font-black text-2xl">&lt;1d</div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

@@ -92,7 +92,7 @@ const About = () => {
             <div className="w-2 h-2 bg-[#F47D11] rounded-full animate-pulse" />
             <span className="text-[#F47D11] font-semibold text-sm tracking-wider">Our Story</span>
           </div>
-          <h2 data-animate="about" className="mt-6 text-3xl font-black text-white sm:text-4xl md:text-5xl">
+          <h2 data-animate="about" className="mt-6 text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight">
             Built for real-world IT delivery.
           </h2>
           <p data-animate="about" className="mt-4 text-base leading-relaxed text-gray-300 sm:text-lg">

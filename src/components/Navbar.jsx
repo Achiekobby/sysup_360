@@ -15,10 +15,9 @@ const Navbar = () => {
   const navItems = useMemo(
     () => [
       { label: "Home", id: "home" },
-      { label: "Solutions", id: "solutions" },
-      { label: "Services", id: "services" },
-      { label: "About", id: "about" },
-      { label: "Contact", id: "contact" },
+      { label: "About Us", id: "about" },
+      { label: "Services & Solutions", id: "solutions" },
+      { label: "Contact Us", id: "contact" },
     ],
     []
   );

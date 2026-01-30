@@ -987,6 +987,36 @@ const Services = () => {
           },
         }
       );
+
+      // Background logo: circular spinning + scroll-driven movement (match Features)
+      const bgLogoWrap = el.querySelector('[data-bg-wrap="logo"]');
+      const bgLogo = el.querySelector('[data-bg="logo"]');
+      if (bgLogo) {
+        gsap.to(bgLogo, {
+          rotation: 360,
+          duration: 60,
+          repeat: -1,
+          ease: 'none',
+          transformOrigin: 'center center',
+        });
+      }
+      if (bgLogoWrap) {
+        gsap.fromTo(
+          bgLogoWrap,
+          { y: 120 },
+          {
+            y: -120,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
+          }
+        );
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -1002,7 +1032,7 @@ const Services = () => {
       }}
     >
       {/* Enhanced Background */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-0">
         {/* Animated gradient orbs */}
         <motion.div
           className="absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full blur-3xl opacity-40"
@@ -1024,6 +1054,21 @@ const Services = () => {
           }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
         />
+
+        {/* Faded glassmorphism + spinning 360 logo with scroll movement (like Features) */}
+        <div
+          data-bg-wrap="logo"
+          className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none"
+        >
+          <div className="absolute w-[900px] h-[900px] rounded-full backdrop-blur-2xl bg-gray-900/50 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" aria-hidden="true" />
+          <img
+            src="/images/360-colour.png"
+            alt=""
+            aria-hidden="true"
+            data-bg="logo"
+            className="relative w-[860px] h-[860px] object-contain opacity-[0.035]"
+          />
+        </div>
         
         {/* Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
@@ -1075,7 +1120,7 @@ const Services = () => {
 
           <h2
             data-animate="header"
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-6"
           >
             <span className="block">What We</span>
             <span className="block bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent mt-2">
