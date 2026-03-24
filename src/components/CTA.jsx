@@ -5,22 +5,26 @@ import { Phone, Mail, Users, Code, Zap, Settings, MessageSquare, Headphones } fr
 const CTA = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 640);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   return (
-    <section id="contact" className="relative py-24 px-6 overflow-hidden bg-gray-900">
+    <section id="contact" className="relative py-16 sm:py-20 lg:py-24 px-4 sm:px-6 overflow-hidden bg-gray-900">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <motion.div
-          className="absolute -top-24 right-0 w-[520px] h-[520px] rounded-full blur-3xl opacity-60"
-          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.22) 0%, transparent 60%)' }}
-          animate={{ y: [0, 30, 0], x: [0, 18, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className="hidden sm:block absolute -top-24 right-0 w-[520px] h-[520px] rounded-full blur-3xl opacity-40"
+          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.18) 0%, transparent 60%)' }}
         />
-        <motion.div
-          className="absolute -bottom-24 left-0 w-[560px] h-[560px] rounded-full blur-3xl opacity-55"
-          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.20) 0%, transparent 60%)' }}
-          animate={{ y: [0, -35, 0], x: [0, -22, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className="hidden sm:block absolute -bottom-24 left-0 w-[560px] h-[560px] rounded-full blur-3xl opacity-35"
+          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.16) 0%, transparent 60%)' }}
         />
       </div>
 
@@ -33,7 +37,7 @@ const CTA = () => {
         data-reveal="clip"
       >
         <div className="max-w-8xl mx-auto rounded-3xl border border-gray-800/60 bg-gray-900/25 backdrop-blur-md overflow-hidden">
-          <div className="p-8 sm:p-12 grid lg:grid-cols-2 gap-10 items-stretch">
+          <div className="p-5 sm:p-8 lg:p-12 grid lg:grid-cols-2 gap-8 sm:gap-10 items-stretch">
             {/* Phone Number Display */}
             <div className="rounded-2xl border border-gray-800/60 bg-gray-950/20 p-8 flex flex-col">
               <div className="inline-flex items-center gap-3 bg-gradient-to-r from-[#F47D11]/10 to-[#F4733A]/10 backdrop-blur-sm px-6 py-3 rounded-full border border-[#F47D11]/20 w-fit">
@@ -42,8 +46,8 @@ const CTA = () => {
               </div>
 
               {/* Animated Illustration */}
-              <div className="mt-8 mb-8 flex justify-center">
-                <div className="relative w-64 h-64 flex items-center justify-center">
+              <div className="mt-6 sm:mt-8 mb-6 sm:mb-8 flex justify-center">
+                <div className="relative w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 flex items-center justify-center">
                   {/* Rotating background glow */}
                   <motion.div
                     className="absolute inset-0 rounded-full border-2 border-[#F47D11]/10"
@@ -70,15 +74,21 @@ const CTA = () => {
                   </motion.div>
 
                   {/* Orbiting Icons */}
-                  {[
+                  {(!isMobile
+                    ? [
                     { Icon: Headphones, angle: 0, color: '#F47D11' },
                     { Icon: MessageSquare, angle: 60, color: '#F4733A' },
                     { Icon: Users, angle: 120, color: '#F47D11' },
                     { Icon: Settings, angle: 180, color: '#F4733A' },
                     { Icon: Code, angle: 240, color: '#F47D11' },
                     { Icon: Zap, angle: 300, color: '#F4733A' },
-                  ].map(({ Icon, angle, color }, i) => {
-                    const radius = 100;
+                  ]
+                    : [
+                        { Icon: Headphones, angle: 30, color: '#F47D11' },
+                        { Icon: MessageSquare, angle: 150, color: '#F4733A' },
+                        { Icon: Users, angle: 270, color: '#F47D11' },
+                      ]).map(({ Icon, angle, color }, i) => {
+                    const radius = isMobile ? 68 : 100;
                     const x = Math.cos((angle * Math.PI) / 180) * radius;
                     const y = Math.sin((angle * Math.PI) / 180) * radius;
                     
@@ -176,33 +186,10 @@ const CTA = () => {
                     <Phone className="w-8 h-8 text-[#F47D11]" strokeWidth={2.5} />
                   </motion.div>
 
-                  {/* Floating Particles */}
-                  {[...Array(8)].map((_, i) => (
-                    <motion.div
-                      key={`particle-${i}`}
-                      className="absolute w-1 h-1 bg-[#F47D11] rounded-full"
-                      style={{
-                        left: `${25 + (i * 8)}%`,
-                        top: `${20 + (i % 3) * 25}%`,
-                      }}
-                      animate={{
-                        y: [0, -20, 0],
-                        x: [0, Math.sin(i) * 10, 0],
-                        opacity: [0.3, 0.8, 0.3],
-                        scale: [0.5, 1.2, 0.5],
-                      }}
-                      transition={{
-                        duration: 2.5 + (i % 3),
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                        delay: i * 0.2,
-                      }}
-                    />
-                  ))}
 
                   {/* Outer rotating ring */}
                   <motion.div
-                    className="absolute w-52 h-52 rounded-full border border-[#F47D11]/15"
+                    className="absolute w-40 h-40 sm:w-48 sm:h-48 md:w-52 md:h-52 rounded-full border border-[#F47D11]/15"
                     animate={{
                       rotate: [0, -360],
                       scale: [1, 1.05, 1],
@@ -219,7 +206,7 @@ const CTA = () => {
                         style={{
                           left: '50%',
                           top: '50%',
-                          transform: `rotate(${angle}deg) translateY(-104px) translateX(-50%)`,
+                          transform: `rotate(${angle}deg) translateY(${isMobile ? '-80px' : '-104px'}) translateX(-50%)`,
                         }}
                         animate={{
                           scale: [1, 1.5, 1],

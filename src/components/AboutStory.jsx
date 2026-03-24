@@ -6,7 +6,7 @@ const AboutStory = () => {
   const sectionRef = useRef(null);
   const storyCardRef = useRef(null);
   const missionCardRef = useRef(null);
-  const [scanHeight, setScanHeight] = useState(900);
+  const [isMobile, setIsMobile] = useState(false);
   const [isStoryHovered, setIsStoryHovered] = useState(false);
   const [isMissionHovered, setIsMissionHovered] = useState(false);
 
@@ -32,7 +32,9 @@ const AboutStory = () => {
   };
 
   useEffect(() => {
-    const update = () => setScanHeight(window.innerHeight || 900);
+    const update = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
     update();
     window.addEventListener('resize', update);
 
@@ -45,7 +47,7 @@ const AboutStory = () => {
     <section
       ref={sectionRef}
       id="about"
-      className="overflow-hidden relative px-6 py-20 sm:py-24"
+      className="overflow-hidden relative px-4 py-14 sm:px-6 sm:py-20 lg:py-24"
       style={{
         background:
           'radial-gradient(1200px 800px at 20% 10%, rgba(244,125,17,0.15), transparent 55%), radial-gradient(900px 700px at 90% 40%, rgba(244,115,58,0.12), transparent 55%), linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
@@ -53,89 +55,25 @@ const AboutStory = () => {
     >
       {/* Enhanced Background */}
       <div className="overflow-hidden absolute inset-0">
-        {/* Multiple Gradient Orbs with different animations */}
-        <motion.div
-          className="absolute top-20 right-20 w-[500px] h-[500px] rounded-full blur-3xl"
-          style={{
-            background: 'radial-gradient(circle, rgba(244, 125, 17, 0.3) 0%, transparent 70%)',
-          }}
-          animate={{ 
-            y: [0, 40, 0], 
-            x: [0, 30, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        {/* Gradient Orbs - static */}
+        <div
+          className="hidden sm:block absolute top-20 right-20 w-[340px] h-[340px] lg:w-[500px] lg:h-[500px] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(244, 125, 17, 0.25) 0%, transparent 70%)' }}
         />
-        <motion.div
-          className="absolute bottom-20 left-20 w-[400px] h-[400px] rounded-full blur-3xl"
-          style={{
-            background: 'radial-gradient(circle, rgba(244, 115, 58, 0.25) 0%, transparent 70%)',
-          }}
-          animate={{ 
-            y: [0, -45, 0], 
-            x: [0, -30, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className="hidden sm:block absolute bottom-20 left-20 w-[280px] h-[280px] lg:w-[400px] lg:h-[400px] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(244, 115, 58, 0.2) 0%, transparent 70%)' }}
         />
-        <motion.div
-          className="absolute top-1/3 left-1/4 w-[350px] h-[350px] rounded-full blur-3xl"
+        <div
+          className="hidden md:block absolute top-1/3 left-1/4 w-[350px] h-[350px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle, rgba(255, 149, 0, 0.2) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(255, 149, 0, 0.15) 0%, transparent 70%)',
           }}
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
         />
 
         {/* Animated Grid with pulse effect */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.04)_1px,transparent_1px)] bg-[size:60px_60px]" />
         
-        {/* Multiple scan lines */}
-        <motion.div
-          className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#F47D11]/60 to-transparent shadow-[0_0_15px_rgba(244,125,17,0.6)]"
-          animate={{ y: [0, scanHeight] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F4733A]/40 to-transparent"
-          animate={{ y: [0, scanHeight] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'linear', delay: 2 }}
-        />
-
-        {/* Enhanced Floating particles */}
-        {[...Array(40)].map((_, i) => {
-          const size = Math.random() > 0.7 ? 2 : 1;
-          return (
-            <motion.div
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                width: `${size}px`,
-                height: `${size}px`,
-                background: i % 3 === 0 
-                  ? 'linear-gradient(135deg, #F47D11, #FF9500)' 
-                  : 'rgba(244, 125, 17, 0.8)',
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                boxShadow: '0 0 10px rgba(244, 125, 17, 0.5)',
-              }}
-              animate={{
-                y: [0, -40, 0],
-                opacity: [0, 1, 0],
-                scale: [0.8, 1.2, 0.8],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 3,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-                ease: 'easeInOut',
-              }}
-            />
-          );
-        })}
 
         {/* Decorative corner elements */}
         <div className="absolute top-0 left-0 w-40 h-40 border-l-2 border-t-2 border-[#F47D11]/20" />
@@ -144,7 +82,7 @@ const AboutStory = () => {
 
       <div className="container relative z-10 mx-auto">
         {/* Header - Matching Features.jsx style */}
-        <div className="mx-auto mb-12 text-center max-w-8xl sm:mb-16" data-reveal="up">
+        <div className="mx-auto mb-10 text-center max-w-8xl sm:mb-14 lg:mb-16" data-reveal="up">
           {/* <motion.div
             data-animate="about"
             className="inline-flex items-center gap-3 bg-gradient-to-r from-[#F47D11]/15 to-[#F4733A]/15 backdrop-blur-md px-8 py-4 rounded-full border border-[#F47D11]/30 shadow-lg shadow-[#F47D11]/10 mb-6"
@@ -174,7 +112,7 @@ const AboutStory = () => {
 
           <h2 
             data-animate="about" 
-            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-6 sm:mb-8"
           >
             <span className="block">About</span>
             <span className="block bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent mt-2">
@@ -182,7 +120,7 @@ const AboutStory = () => {
             </span>
           </h2>
           
-          <div className="flex gap-4 justify-center items-center mb-8" data-animate="about">
+          <div className="flex gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8" data-animate="about">
             <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#F47D11]/50" />
             <div className="w-2 h-2 rounded-full bg-[#F47D11]/60" />
             <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#F47D11]/50" />
@@ -190,16 +128,16 @@ const AboutStory = () => {
         </div>
 
         {/* Main Content - Vertically Aligned */}
-        <div className="flex relative flex-col gap-0 mx-auto mb-12 max-w-8xl sm:mb-16" data-reveal="stagger" style={{ perspective: '2000px' }}>
+        <div className="flex relative flex-col gap-0 mx-auto mb-10 max-w-8xl sm:mb-14 lg:mb-16" data-reveal="stagger" style={{ perspective: '2000px' }}>
           {/* Our Story - Enhanced 3D Card */}
           <motion.div
             ref={storyCardRef}
-            className="overflow-hidden relative z-10 p-8 rounded-3xl border backdrop-blur-xl group border-gray-800/60 sm:p-10"
+            className="overflow-hidden relative z-10 p-5 rounded-2xl sm:rounded-3xl border backdrop-blur-xl group border-gray-800/60 sm:p-8 lg:p-10"
             style={{
               background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(26, 26, 46, 0.8) 100%)',
               transformStyle: 'preserve-3d',
-              rotateX: isStoryHovered ? rotateX : 0,
-              rotateY: isStoryHovered ? rotateY : 0,
+              rotateX: !isMobile && isStoryHovered ? rotateX : 0,
+              rotateY: !isMobile && isStoryHovered ? rotateY : 0,
             }}
             onMouseMove={(e) => handleMouseMove(e, storyCardRef)}
             onMouseEnter={() => setIsStoryHovered(true)}
@@ -207,11 +145,15 @@ const AboutStory = () => {
               setIsStoryHovered(false);
               handleMouseLeave();
             }}
-            whileHover={{
-              scale: 1.02,
-              z: 50,
-              transition: { type: 'spring', stiffness: 300, damping: 30 }
-            }}
+            whileHover={
+              isMobile
+                ? {}
+                : {
+                    scale: 1.02,
+                    z: 50,
+                    transition: { type: 'spring', stiffness: 300, damping: 30 },
+                  }
+            }
           >
             {/* Animated gradient border */}
             <motion.div
@@ -235,14 +177,14 @@ const AboutStory = () => {
             />
 
             {/* Inner content wrapper */}
-            <div className="relative p-6 bg-gradient-to-br rounded-3xl sm:p-8 from-gray-900/95 to-gray-900/90" style={{ transform: 'translateZ(30px)' }}>
+            <div className="relative p-4 bg-gradient-to-br rounded-2xl sm:rounded-3xl sm:p-6 lg:p-8 from-gray-900/95 to-gray-900/90" style={{ transform: isMobile ? 'translateZ(0px)' : 'translateZ(30px)' }}>
               {/* Animated Lucide Icon */}
               <motion.div 
                 className="mb-6"
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
               >
-                <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/30 border-2 border-[#F47D11]/40 flex items-center justify-center backdrop-blur-sm shadow-lg shadow-[#F47D11]/20">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/30 border-2 border-[#F47D11]/40 flex items-center justify-center backdrop-blur-sm shadow-lg shadow-[#F47D11]/20">
                   <motion.div
                     animate={{ 
                       y: [0, -5, 0],
@@ -250,7 +192,7 @@ const AboutStory = () => {
                     }}
                     transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                   >
-                    <BookOpen className="w-10 h-10 text-[#F47D11]" strokeWidth={2.5} />
+                    <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-[#F47D11]" strokeWidth={2.5} />
                   </motion.div>
                   <motion.div
                     className="absolute inset-0 rounded-2xl bg-[#F47D11]/20 blur-xl"
@@ -267,26 +209,26 @@ const AboutStory = () => {
                 <span className="text-xs uppercase tracking-widest text-[#F47D11] font-bold">Our Story</span>
               </motion.div>
 
-              <h3 className="mb-4 text-2xl font-black leading-tight text-white sm:text-3xl">
+              <h3 className="mb-4 text-xl sm:text-2xl font-black leading-tight text-white lg:text-3xl">
                 We've built a team with diverse tech expertise, united by one goal.
               </h3>
 
-              <p className="mb-6 text-base leading-relaxed text-gray-300">
+              <p className="mb-6 text-sm sm:text-base leading-relaxed text-gray-300">
                 From on-site installations and network deployments to VoIP PBX systems, USSD services, call centers, workstation and server maintenance, disaster recovery, WAN solutions, and app development — we've got you covered. Startups are especially close to our hearts because we believe every business deserves a fair shot at greatness. But our passion doesn't stop there — we bring the same energy, commitment, and professionalism to established brands too. No matter the size of the project, our team is driven by a shared dedication to quality and excellence.
               </p>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[#F47D11]/20">
+              <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-4 border-t border-[#F47D11]/20">
                 <motion.div data-animate="stat" className="text-center">
-                  <div className="text-2xl font-black text-[#F47D11] mb-1">10+</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#F47D11] mb-1">10+</div>
                   <div className="text-xs tracking-wide text-gray-400 uppercase">Years</div>
                 </motion.div>
                 <motion.div data-animate="stat" className="text-center">
-                  <div className="text-2xl font-black text-[#F47D11] mb-1">200+</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#F47D11] mb-1">200+</div>
                   <div className="text-xs tracking-wide text-gray-400 uppercase">Projects</div>
                 </motion.div>
                 <motion.div data-animate="stat" className="text-center">
-                  <div className="text-2xl font-black text-[#F47D11] mb-1">50+</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#F47D11] mb-1">50+</div>
                   <div className="text-xs tracking-wide text-gray-400 uppercase">Clients</div>
                 </motion.div>
               </div>
@@ -298,7 +240,7 @@ const AboutStory = () => {
           </motion.div>
 
           {/* Seamless Connector Between Cards */}
-          <div className="flex relative z-20 justify-center items-center py-8 sm:py-12">
+          <div className="flex relative z-20 justify-center items-center py-5 sm:py-10 lg:py-12">
             {/* Vertical Connection Line with Particles */}
             <div className="flex relative flex-col items-center">
               {/* Glowing vertical line */}
@@ -317,31 +259,6 @@ const AboutStory = () => {
                 }}
               />
 
-              {/* Animated particles flowing down */}
-              {[0, 1, 2, 3, 4].map((i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-1.5 h-1.5 rounded-full"
-                  style={{
-                    background: i % 2 === 0
-                      ? 'linear-gradient(135deg, #F47D11, #FF9500)'
-                      : 'linear-gradient(135deg, #F4733A, #F47D11)',
-                    boxShadow: '0 0 8px rgba(244, 125, 17, 0.8)',
-                  }}
-                  animate={{
-                    y: [0, 80],
-                    opacity: [0, 0.8, 0.8, 0],
-                    scale: [0.3, 1.2, 1.2, 0.3],
-                    x: [0, Math.sin(i) * 3, Math.sin(i) * 3, 0],
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    delay: i * 0.5,
-                    ease: 'easeInOut',
-                  }}
-                />
-              ))}
 
               {/* Central pulsing node */}
               <motion.div
@@ -373,7 +290,7 @@ const AboutStory = () => {
               </motion.div>
 
               {/* Expanding rings with enhanced visuals */}
-              {[0, 1, 2].map((i) => (
+              {(!isMobile ? [0, 1, 2] : [0, 1]).map((i) => (
                 <motion.div
                   key={`ring-${i}`}
                   className="absolute top-1/2 left-1/2 rounded-full -translate-x-1/2 -translate-y-1/2"
@@ -399,7 +316,7 @@ const AboutStory = () => {
 
               {/* Side decorative elements */}
               <motion.div
-                className="absolute left-full ml-6 w-20 h-px"
+                className="hidden md:block absolute left-full ml-6 w-20 h-px"
                 style={{
                   background: 'linear-gradient(90deg, rgba(244,125,17,0.8), rgba(244,125,17,0.4), transparent)',
                   boxShadow: '0 0 10px rgba(244,125,17,0.5)',
@@ -415,7 +332,7 @@ const AboutStory = () => {
                 }}
               />
               <motion.div
-                className="absolute right-full mr-6 w-20 h-px"
+                className="hidden md:block absolute right-full mr-6 w-20 h-px"
                 style={{
                   background: 'linear-gradient(-90deg, rgba(244,115,58,0.8), rgba(244,115,58,0.4), transparent)',
                   boxShadow: '0 0 10px rgba(244,115,58,0.5)',
@@ -437,12 +354,12 @@ const AboutStory = () => {
           {/* Mission & Vision - Enhanced 3D Card */}
           <motion.div
             ref={missionCardRef}
-            className="overflow-hidden relative z-10 p-8 rounded-3xl border backdrop-blur-xl group border-gray-800/60 sm:p-10"
+            className="overflow-hidden relative z-10 p-5 rounded-2xl sm:rounded-3xl border backdrop-blur-xl group border-gray-800/60 sm:p-8 lg:p-10"
             style={{
               background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(26, 26, 46, 0.8) 100%)',
               transformStyle: 'preserve-3d',
-              rotateX: isMissionHovered ? rotateX : 0,
-              rotateY: isMissionHovered ? rotateY : 0,
+              rotateX: !isMobile && isMissionHovered ? rotateX : 0,
+              rotateY: !isMobile && isMissionHovered ? rotateY : 0,
             }}
             onMouseMove={(e) => handleMouseMove(e, missionCardRef)}
             onMouseEnter={() => setIsMissionHovered(true)}
@@ -450,11 +367,15 @@ const AboutStory = () => {
               setIsMissionHovered(false);
               handleMouseLeave();
             }}
-            whileHover={{
-              scale: 1.02,
-              z: 50,
-              transition: { type: 'spring', stiffness: 300, damping: 30 }
-            }}
+            whileHover={
+              isMobile
+                ? {}
+                : {
+                    scale: 1.02,
+                    z: 50,
+                    transition: { type: 'spring', stiffness: 300, damping: 30 },
+                  }
+            }
           >
             {/* Animated gradient border */}
             <motion.div
@@ -478,14 +399,14 @@ const AboutStory = () => {
             />
 
             {/* Inner content wrapper */}
-            <div className="relative p-6 bg-gradient-to-br rounded-3xl sm:p-8 from-gray-900/95 to-gray-900/90" style={{ transform: 'translateZ(30px)' }}>
+            <div className="relative p-4 bg-gradient-to-br rounded-2xl sm:rounded-3xl sm:p-6 lg:p-8 from-gray-900/95 to-gray-900/90" style={{ transform: isMobile ? 'translateZ(0px)' : 'translateZ(30px)' }}>
               {/* Animated Lucide Icon */}
               <motion.div 
                 className="mb-6"
                 whileHover={{ scale: 1.1, rotate: -5 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
               >
-                <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-[#F4733A]/30 to-[#F47D11]/30 border-2 border-[#F4733A]/40 flex items-center justify-center backdrop-blur-sm shadow-lg shadow-[#F4733A]/20">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#F4733A]/30 to-[#F47D11]/30 border-2 border-[#F4733A]/40 flex items-center justify-center backdrop-blur-sm shadow-lg shadow-[#F4733A]/20">
                   <motion.div
                     animate={{ 
                       scale: [1, 1.1, 1],
@@ -493,7 +414,7 @@ const AboutStory = () => {
                     }}
                     transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
                   >
-                    <Target className="w-10 h-10 text-[#F4733A]" strokeWidth={2.5} />
+                    <Target className="w-8 h-8 sm:w-10 sm:h-10 text-[#F4733A]" strokeWidth={2.5} />
                   </motion.div>
                   <motion.div
                     className="absolute inset-0 rounded-2xl bg-[#F4733A]/20 blur-xl"
@@ -510,11 +431,11 @@ const AboutStory = () => {
                 <span className="text-xs uppercase tracking-widest text-[#F4733A] font-bold">Mission & Vision</span>
               </motion.div>
 
-              <h3 className="mb-4 text-2xl font-black leading-tight text-white sm:text-3xl">
+              <h3 className="mb-4 text-xl sm:text-2xl font-black leading-tight text-white lg:text-3xl">
                 It's simple — to catalyze business transformation.
               </h3>
 
-              <p className="text-base leading-relaxed text-gray-300">
+              <p className="text-sm sm:text-base leading-relaxed text-gray-300">
                 It's simple — to catalyze business transformation through secure, tailored, and cost-effective solutions that deliver real impact and keep us ahead of the curve.
               </p>
 
@@ -529,7 +450,7 @@ const AboutStory = () => {
         </div>
 
         {/* Additional Visual Element - Animated Timeline or Connection */}
-        <div className="flex gap-6 justify-center items-center mx-auto mb-8 max-w-6xl">
+        <div className="hidden sm:flex gap-6 justify-center items-center mx-auto mb-8 max-w-6xl">
           <motion.div
             className="flex-1 h-px"
             style={{

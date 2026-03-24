@@ -243,7 +243,7 @@ const Features = () => {
   const cardRefs = useRef({});
   // All cards are always open - no expand/collapse animation
   const [inViewId, setInViewId] = useState('call-center'); // Default to first card
-  const [scanHeight, setScanHeight] = useState(900);
+  const [isMobile, setIsMobile] = useState(false);
 
   const serviceMarquee = useMemo(
     () => [
@@ -376,7 +376,9 @@ const Features = () => {
   );
 
   useEffect(() => {
-    const updateScanHeight = () => setScanHeight(window.innerHeight || 900);
+    const updateScanHeight = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
     updateScanHeight();
     window.addEventListener('resize', updateScanHeight);
 
@@ -401,7 +403,7 @@ const Features = () => {
       }
 
       // Horizontal scroll setup
-      if (horizontalScrollRef.current && cardsContainerRef.current) {
+      if (!isMobile && horizontalScrollRef.current && cardsContainerRef.current) {
         const cards = cardsContainerRef.current.querySelectorAll('[data-horizontal-card]');
         if (cards.length > 0) {
           const cardWidth = cards[0].offsetWidth;
@@ -579,13 +581,13 @@ const Features = () => {
       window.removeEventListener('resize', updateScanHeight);
       ctx.revert();
     };
-  }, [solutions]);
+  }, [solutions, isMobile]);
 
   return (
     <section
       ref={sectionRef}
       id="solutions"
-      className="overflow-hidden relative px-6 py-24 min-h-screen"
+      className="overflow-hidden relative px-4 sm:px-6 py-16 sm:py-20 lg:py-24 min-h-screen"
       style={{
         background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
       }}
@@ -593,32 +595,22 @@ const Features = () => {
       {/* Keep old anchor alive if needed */}
       <div id="features" className="absolute -top-24" />
 
-      {/* Background (match Hero) */}
+      {/* Background */}
       <div className="overflow-hidden absolute inset-0 z-0">
-        {/* Hero-like orbs */}
-        <motion.div
-          className="absolute top-20 right-20 w-96 h-96 rounded-full opacity-70 blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(244, 125, 17, 0.3) 0%, transparent 70%)' }}
-          animate={{ y: [0, 30, 0], x: [0, 20, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        {/* Static orbs */}
+        <div
+          className="hidden sm:block absolute top-20 right-20 w-96 h-96 rounded-full opacity-60 blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(244, 125, 17, 0.25) 0%, transparent 70%)' }}
         />
-        <motion.div
-          className="absolute left-10 bottom-40 w-80 h-80 rounded-full opacity-70 blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(244, 115, 58, 0.25) 0%, transparent 70%)' }}
-          animate={{ y: [0, -35, 0], x: [0, -25, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl opacity-60"
-          style={{ background: 'radial-gradient(circle, rgba(244, 125, 17, 0.15) 0%, transparent 70%)' }}
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className="hidden sm:block absolute left-10 bottom-40 w-80 h-80 rounded-full opacity-60 blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(244, 115, 58, 0.2) 0%, transparent 70%)' }}
         />
 
         {/* Faded glassmorphism + spinning 360 logo with scroll movement */}
         <div
           data-bg-wrap="logo"
-          className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none"
+          className="hidden lg:flex absolute inset-0 items-center justify-center overflow-hidden pointer-events-none"
         >
           <div className="absolute w-[900px] h-[900px] rounded-full backdrop-blur-2xl bg-gray-900/50 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" aria-hidden="true" />
           <img
@@ -633,27 +625,10 @@ const Features = () => {
         {/* Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-        {/* Scan line */}
-        <motion.div
-          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F47D11]/40 to-transparent"
-          animate={{ y: [0, scanHeight] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
-        />
-
-        {/* Hero-like particles */}
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-[#F47D11] rounded-full"
-            style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-            animate={{ y: [0, -30, 0], opacity: [0, 1, 0] }}
-            transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }}
-          />
-        ))}
       </div>
 
       <div className="container relative z-10 mx-auto">
-        <div ref={headerRef} className="mx-auto mb-20 max-w-5xl text-center" data-reveal="up">
+        <div ref={headerRef} className="mx-auto mb-12 sm:mb-16 lg:mb-20 max-w-5xl text-center" data-reveal="up">
           {/* <div
             data-animate="header"
             className="inline-flex items-center gap-3 bg-gradient-to-r from-[#F47D11]/10 to-[#F4733A]/10 backdrop-blur-sm px-6 py-3 rounded-full border border-[#F47D11]/20 mb-8"
@@ -664,7 +639,7 @@ const Features = () => {
 
           <h2 
             data-animate="header" 
-            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-6 sm:mb-8"
           >
             <span className="block">Our Solutions</span>
             <span className="block bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent mt-2">
@@ -672,7 +647,7 @@ const Features = () => {
             </span>
           </h2>
           
-          <div className="flex gap-4 justify-center items-center mb-8" data-animate="header">
+          <div className="flex gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8" data-animate="header">
             <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#F47D11]/50" />
             <div className="w-2 h-2 rounded-full bg-[#F47D11]/60" />
             <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#F47D11]/50" />
@@ -682,15 +657,15 @@ const Features = () => {
             data-animate="header" 
             className="mx-auto space-y-6 max-w-4xl"
           >
-            <p className="text-lg leading-relaxed text-gray-300 sm:text-xl">
+            <p className="text-base leading-relaxed text-gray-300 sm:text-xl">
               At SysUp360, we don't just provide IT services — we tailor solutions that grow with your business. Our diverse team brings together a wide range of technical expertise, giving us the flexibility and edge to deliver exactly what you need, when you need it.
             </p>
             
-            <p className="text-lg leading-relaxed text-gray-300 sm:text-xl">
+            <p className="text-base leading-relaxed text-gray-300 sm:text-xl">
               From quick support fixes for small businesses to full-scale deployments and enterprise rollouts, we approach every project with <span className="text-[#F47D11] font-semibold">precision</span>, <span className="text-[#F47D11] font-semibold">urgency</span>, and <span className="text-[#F47D11] font-semibold">professionalism</span>.
             </p>
             
-            <p className="text-lg font-medium leading-relaxed text-gray-200 sm:text-xl">
+            <p className="text-base font-medium leading-relaxed text-gray-200 sm:text-xl">
               Ready to take your IT to the next level? Explore our offerings below and see how SysUp360 can keep your business moving forward.
             </p>
           </div>
@@ -718,39 +693,45 @@ const Features = () => {
         </div>
 
         {/* Horizontal Scroll Section */}
-        <div 
-          ref={horizontalScrollRef} 
-          className="flex overflow-hidden relative items-center w-full h-screen"
-          style={{ minHeight: '100vh' }}
-        >
-          <div
-            ref={cardsContainerRef}
-            className="flex gap-6 px-6 md:px-12"
-            style={{ willChange: 'transform' }}
-          >
+        {isMobile ? (
+          <div className="grid gap-4 mt-8 sm:mt-10">
             {solutions.map((item) => (
-              <div
-                key={item.id}
-                data-horizontal-card
-                data-card-id={item.id}
-                ref={(el) => {
-                  if (el) cardRefs.current[item.id] = el;
-                }}
-                className="flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[45vw] xl:w-[400px] max-w-md"
-                style={{ willChange: 'transform, opacity' }}
-              >
-                <SolutionsCard
-                  item={item}
-                  isOpen={true}
-                  isInView={inViewId === item.id}
-                />
+              <div key={item.id}>
+                <SolutionsCard item={item} isOpen={true} isInView={true} />
               </div>
             ))}
           </div>
-        </div>
+        ) : (
+          <div
+            ref={horizontalScrollRef}
+            className="flex overflow-hidden relative items-center w-full h-screen"
+            style={{ minHeight: '100vh' }}
+          >
+            <div
+              ref={cardsContainerRef}
+              className="flex gap-6 px-6 md:px-12"
+              style={{ willChange: 'transform' }}
+            >
+              {solutions.map((item) => (
+                <div
+                  key={item.id}
+                  data-horizontal-card
+                  data-card-id={item.id}
+                  ref={(el) => {
+                    if (el) cardRefs.current[item.id] = el;
+                  }}
+                  className="flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[60vw] lg:w-[45vw] xl:w-[400px] max-w-md"
+                  style={{ willChange: 'transform, opacity' }}
+                >
+                  <SolutionsCard item={item} isOpen={true} isInView={inViewId === item.id} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Bottom promise row */}
-        <div className="grid gap-6 mt-14 lg:grid-cols-3" data-reveal="stagger">
+        <div className="grid gap-4 sm:gap-6 mt-10 sm:mt-14 lg:grid-cols-3" data-reveal="stagger">
           {[
             {
               title: 'Secure by design',

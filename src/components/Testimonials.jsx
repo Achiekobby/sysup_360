@@ -8,10 +8,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
   const sectionRef = useRef(null);
-  const [scanHeight, setScanHeight] = useState(900);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const update = () => setScanHeight(window.innerHeight || 900);
+    const update = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
     update();
     window.addEventListener('resize', update);
 
@@ -64,22 +66,13 @@ const About = () => {
     >
       <div className="overflow-hidden absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        <motion.div
-          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F47D11]/40 to-transparent"
-          animate={{ y: [0, scanHeight] }}
-          transition={{ duration: 5.2, repeat: Infinity, ease: 'linear' }}
+        <div
+          className="absolute top-24 left-24 w-96 h-96 rounded-full opacity-50 blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.18) 0%, transparent 70%)' }}
         />
-        <motion.div
-          className="absolute top-24 left-24 w-96 h-96 rounded-full opacity-60 blur-3xl"
-          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.22) 0%, transparent 70%)' }}
-          animate={{ y: [0, 30, 0], x: [0, 18, 0] }}
-          transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute right-16 bottom-20 w-80 h-80 rounded-full blur-3xl opacity-55"
-          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.18) 0%, transparent 70%)' }}
-          animate={{ y: [0, -35, 0], x: [0, -22, 0] }}
-          transition={{ duration: 7.2, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className="absolute right-16 bottom-20 w-80 h-80 rounded-full blur-3xl opacity-45"
+          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.15) 0%, transparent 70%)' }}
         />
       </div>
 
@@ -132,7 +125,7 @@ const About = () => {
                 <div className="mt-2 text-2xl font-black text-white">Team. Tools. Execution.</div>
                 <div className="overflow-hidden mt-4 bg-gradient-to-br rounded-2xl border backdrop-blur-sm border-gray-800/60 from-gray-900/80 to-gray-800/60">
                   <motion.div
-                    className="w-full h-[300px] sm:h-[360px] relative flex items-center justify-center p-8"
+                    className="w-full h-[240px] sm:h-[360px] relative flex items-center justify-center p-4 sm:p-8"
                     initial={{ opacity: 0, scale: 1.02 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.4 }}
@@ -178,7 +171,7 @@ const About = () => {
                       { Icon: Database, angle: 240, color: '#F47D11' },
                       { Icon: Cpu, angle: 300, color: '#F4733A' },
                     ].map(({ Icon, angle, color }, i) => {
-                      const radius = 140; // Increased radius
+                      const radius = isMobile ? 92 : 140;
                       const x = Math.cos((angle * Math.PI) / 180) * radius;
                       const y = Math.sin((angle * Math.PI) / 180) * radius;
                       
@@ -218,7 +211,7 @@ const About = () => {
                               }}
                             >
                               <motion.div
-                                className="p-3 rounded-xl bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-2 border-[#F47D11]/40 backdrop-blur-sm shadow-lg"
+                                className="p-2 sm:p-3 rounded-xl bg-gradient-to-br from-gray-800/90 to-gray-900/90 border-2 border-[#F47D11]/40 backdrop-blur-sm shadow-lg"
                                 animate={{
                                   borderColor: [
                                     'rgba(244, 125, 17, 0.4)',
@@ -234,7 +227,7 @@ const About = () => {
                                 }}
                               >
                                 <Icon
-                                  className="w-5 h-5"
+                                  className="w-4 h-4 sm:w-5 sm:h-5"
                                   style={{ color }}
                                   strokeWidth={2}
                                 />
@@ -263,7 +256,7 @@ const About = () => {
 
                     {/* Central Logo/Icon */}
                     <motion.div
-                      className="absolute z-10 p-4 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 backdrop-blur-md shadow-2xl"
+                      className="absolute z-10 p-3 sm:p-4 rounded-2xl bg-gradient-to-br from-[#F47D11]/30 to-[#F4733A]/20 border-2 border-[#F47D11]/50 backdrop-blur-md shadow-2xl"
                       animate={{
                         y: [0, -5, 0],
                       }}
@@ -273,36 +266,13 @@ const About = () => {
                         ease: 'easeInOut',
                       }}
                     >
-                      <Zap className="w-10 h-10 text-[#F47D11]" strokeWidth={2.5} />
+                      <Zap className="w-7 h-7 sm:w-10 sm:h-10 text-[#F47D11]" strokeWidth={2.5} />
                     </motion.div>
 
-                    {/* Floating Particles */}
-                    {[...Array(12)].map((_, i) => (
-                      <motion.div
-                        key={`particle-${i}`}
-                        className="absolute w-1 h-1 bg-[#F47D11] rounded-full"
-                        style={{
-                          left: `${20 + (i * 6)}%`,
-                          top: `${15 + (i % 4) * 20}%`,
-                        }}
-                        animate={{
-                          y: [0, -30, 0],
-                          x: [0, Math.sin(i) * 15, 0],
-                          opacity: [0.3, 0.8, 0.3],
-                          scale: [0.5, 1.5, 0.5],
-                        }}
-                        transition={{
-                          duration: 3 + (i % 3),
-                          repeat: Infinity,
-                          ease: 'easeInOut',
-                          delay: i * 0.15,
-                        }}
-                      />
-                    ))}
 
                     {/* Outer rotating ring */}
                     <motion.div
-                      className="absolute w-48 h-48 rounded-full border border-[#F47D11]/20"
+                      className="absolute w-36 h-36 sm:w-48 sm:h-48 rounded-full border border-[#F47D11]/20"
                       animate={{
                         rotate: [0, -360],
                         scale: [1, 1.1, 1],
@@ -319,7 +289,7 @@ const About = () => {
                           style={{
                             left: '50%',
                             top: '50%',
-                            transform: `rotate(${angle}deg) translateY(-96px) translateX(-50%)`,
+                            transform: `rotate(${angle}deg) translateY(${isMobile ? '-72px' : '-96px'}) translateX(-50%)`,
                           }}
                           animate={{
                             scale: [1, 1.5, 1],

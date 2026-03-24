@@ -11,12 +11,11 @@ import { TypeAnimation } from "react-type-animation";
 import AnimatedHeroImage from "./AnimatedHeroImage";
 
 const Hero = () => {
+  const NAVBAR_HEIGHT_PX = 88;
   const heroRef = useRef(null);
   const imageRef = useRef(null);
   const titleRef = useRef(null);
   const servicesRef = useRef(null);
-  const [scanHeight, setScanHeight] = useState(1000);
-
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -55,11 +54,6 @@ const Hero = () => {
   }, [mouseX, mouseY]);
 
   useEffect(() => {
-    // Keep scan line height in sync (avoid using window.* inside JSX)
-    const updateScanHeight = () => setScanHeight(window.innerHeight || 1000);
-    updateScanHeight();
-    window.addEventListener("resize", updateScanHeight);
-
     // Scope GSAP to this component (prevents StrictMode double-invoke leaving elements hidden)
     const ctx = gsap.context(() => {
       const masterTl = gsap.timeline({ defaults: { ease: "power3.out" } });
@@ -124,63 +118,9 @@ const Hero = () => {
         );
       }
 
-      // Continuous animations - optimized for smoothness
-      gsap.set(".floating-orb-1, .floating-orb-2, .floating-orb-3", {
-        willChange: "transform",
-        force3D: true,
-      });
-
-      gsap.to(".floating-orb-1", {
-        y: "+=40",
-        x: "+=30",
-        rotation: 360,
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        force3D: true,
-      });
-
-      gsap.to(".floating-orb-2", {
-        y: "-=50",
-        x: "-=40",
-        rotation: -360,
-        duration: 9,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        force3D: true,
-      });
-
-      gsap.to(".floating-orb-3", {
-        y: "+=35",
-        x: "-=25",
-        rotation: 180,
-        duration: 7,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        force3D: true,
-      });
-
-      // Pulsing glow effect - smoother pulse
-      gsap.set(".glow-pulse", {
-        willChange: "transform, opacity",
-        force3D: true,
-      });
-      gsap.to(".glow-pulse", {
-        scale: 1.2,
-        opacity: 0.4,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "power1.inOut",
-        force3D: true,
-      });
     }, heroRef);
 
     return () => {
-      window.removeEventListener("resize", updateScanHeight);
       ctx.revert();
     };
   }, []);
@@ -259,7 +199,8 @@ const Hero = () => {
           "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
         position: "relative",
         zIndex: 1,
-        paddingTop: "clamp(0.25rem, 0.5vh, 0.5rem)",
+        minHeight: `calc(100svh - ${NAVBAR_HEIGHT_PX}px)`,
+        paddingTop: "clamp(3.75rem, 7vh, 5.25rem)",
         paddingBottom: "clamp(2rem, 5vh, 4rem)",
       }}
     >
@@ -267,86 +208,39 @@ const Hero = () => {
       <div className="overflow-hidden absolute inset-0 z-0">
         {/* Gradient Orbs with parallax - optimized */}
         <motion.div
-          className="absolute top-20 right-20 w-96 h-96 rounded-full blur-3xl floating-orb-1 glow-pulse"
+          className="absolute top-20 right-20 w-96 h-96 rounded-full blur-3xl"
           style={{
             background:
               "radial-gradient(circle, rgba(244, 125, 17, 0.3) 0%, transparent 70%)",
             x: useTransform(springX, [-1, 1], [-100, 100]),
             y: useTransform(springY, [-1, 1], [-100, 100]),
-            willChange: "transform",
           }}
         />
         <motion.div
-          className="absolute left-10 bottom-40 w-80 h-80 rounded-full blur-3xl floating-orb-2"
+          className="absolute left-10 bottom-40 w-80 h-80 rounded-full blur-3xl"
           style={{
             background:
               "radial-gradient(circle, rgba(244, 115, 58, 0.25) 0%, transparent 70%)",
             x: useTransform(springX, [-1, 1], [100, -100]),
             y: useTransform(springY, [-1, 1], [100, -100]),
-            willChange: "transform",
           }}
         />
-        <motion.div
-          className="floating-orb-3 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl"
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl"
           style={{
             background:
-              "radial-gradient(circle, rgba(244, 125, 17, 0.15) 0%, transparent 70%)",
-            willChange: "transform",
+              "radial-gradient(circle, rgba(244, 125, 17, 0.1) 0%, transparent 70%)",
           }}
         />
 
         {/* Animated Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-        {/* Animated scan lines - optimized */}
-        <motion.div
-          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F47D11]/50 to-transparent"
-          style={{ willChange: "transform" }}
-          animate={{
-            y: [0, scanHeight],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-
-        {/* Floating particles - optimized with useMemo */}
-        {useMemo(() => {
-          return [...Array(30)].map((_, i) => {
-            const left = Math.random() * 100;
-            const top = Math.random() * 100;
-            const duration = 3 + Math.random() * 2;
-            const delay = Math.random() * 2;
-            return (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-[#F47D11] rounded-full"
-                style={{
-                  left: `${left}%`,
-                  top: `${top}%`,
-                  willChange: 'transform, opacity',
-                }}
-                animate={{
-                  y: [0, -30, 0],
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration,
-                  repeat: Infinity,
-                  delay,
-                  ease: 'easeInOut',
-                }}
-              />
-            );
-          });
-        }, [])}
       </div>
 
       {/* Main Content */}
       <motion.div
-        className="relative z-20 px-6 pt-0 pb-8 mx-auto max-w-8xl lg:px-12 sm:pt-2 sm:pb-12 lg:pt-4 lg:pb-16"
+        className="relative z-20 px-4 pt-0 pb-8 mx-auto w-full max-w-8xl sm:px-6 lg:px-12 sm:pt-2 sm:pb-12 lg:pt-4 lg:pb-16"
         style={{
           opacity: opacity,
           scale: scale,
@@ -354,9 +248,9 @@ const Hero = () => {
           willChange: "transform, opacity",
         }}
       >
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start lg:items-center min-h-0 lg:min-h-[75vh]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start lg:items-center min-h-0 lg:min-h-[75vh]">
           {/* Left Content */}
-          <div className="relative z-30 -mt-6 space-y-4 text-center lg:text-left sm:-mt-8 sm:space-y-5 lg:-mt-12 lg:space-y-6">
+          <div className="relative z-30 -mt-4 space-y-4 text-center lg:text-left sm:-mt-6 sm:space-y-5 lg:-mt-24 lg:space-y-6">
             {/* Title */}
             <div ref={titleRef} className="space-y-1 sm:space-y-2" data-reveal="tilt">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.15]">
@@ -427,8 +321,8 @@ const Hero = () => {
                     happen
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-2 justify-center items-center mt-3 text-2xl font-light title-line text-white/90 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:mt-4 lg:mt-5 lg:justify-start sm:gap-3">
-                  <span>
+                <div className="flex flex-col gap-1 justify-center items-start mt-3 text-2xl font-light title-line text-white/90 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:mt-4 lg:mt-5 lg:justify-start sm:gap-2">
+                  <span className="whitespace-nowrap shrink-0">
                     with our 360
                     <motion.span
                       className="inline-flex items-baseline ml-0.5 font-bold"
@@ -457,7 +351,7 @@ const Hero = () => {
                       ))}
                     </motion.span>
                   </span>
-                  <span className="relative inline-block min-w-[250px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] text-left h-[1.2em] overflow-visible">
+                  <span className="relative inline-block min-w-[180px] sm:min-w-[320px] md:min-w-[400px] lg:min-w-[500px] text-left h-[1.2em] overflow-visible whitespace-nowrap">
                     <motion.span
                       className="inline-block relative z-30 font-bold tracking-wide uppercase"
                       animate={{
@@ -502,6 +396,7 @@ const Hero = () => {
                           fontWeight: "inherit",
                           letterSpacing: "inherit",
                           display: "inline-block",
+                          whiteSpace: "nowrap",
                           background: textColor,
                           backgroundClip: "text",
                           WebkitBackgroundClip: "text",
@@ -547,20 +442,20 @@ const Hero = () => {
           {/* Right Visual - Animated Image */}
           <motion.div
             ref={imageRef}
-            className="flex relative justify-center items-center -mt-8 w-full h-full sm:-mt-12 lg:-mt-4"
-            style={{ minHeight: "clamp(400px, 50vh, 600px)", height: "100%" }}
+            className="flex relative justify-center items-center mt-10 -mx-2 w-full h-full min-h-[220px] sm:mx-0 sm:mt-4 sm:min-h-[280px] lg:-mt-20 lg:min-h-[560px]"
+            style={{ height: "100%" }}
             data-reveal="clip"
           >
             {/* Decorative elements around image - optimized */}
             <div className="flex absolute inset-0 justify-center items-center">
               <motion.div
-                className="absolute w-[120%] h-[120%] rounded-full border border-[#F47D11]/10"
+                className="hidden sm:block absolute w-[120%] h-[120%] rounded-full border border-[#F47D11]/10"
                 style={{ willChange: "transform" }}
                 animate={{ rotate: 360 }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               />
               <motion.div
-                className="absolute w-[110%] h-[110%] rounded-full border border-[#F4733A]/10"
+                className="hidden sm:block absolute w-[110%] h-[110%] rounded-full border border-[#F4733A]/10"
                 style={{ willChange: "transform" }}
                 animate={{ rotate: -360 }}
                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
@@ -580,7 +475,7 @@ const Hero = () => {
 
       {/* Scroll Indicator - optimized */}
       <motion.div
-        className="absolute bottom-10 left-1/2 z-20 transform -translate-x-1/2"
+        className="hidden sm:block absolute bottom-10 left-1/2 z-20 transform -translate-x-1/2"
         style={{ willChange: 'transform, opacity' }}
         animate={{ y: [0, 15, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}

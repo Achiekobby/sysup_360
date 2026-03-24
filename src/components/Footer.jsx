@@ -4,12 +4,21 @@ import { Phone } from "lucide-react";
 import Images from "../Images";
 
 const Footer = () => {
+  const NAV_OFFSET = 88;
   const quickLinks = [
     { label: "Home", href: "#home" },
     { label: "About Us", href: "#about" },
     { label: "Services & Solutions", href: "#solutions" },
     { label: "Contact Us", href: "#contact" },
   ];
+
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (!section) return;
+    const y = section.getBoundingClientRect().top + window.scrollY - NAV_OFFSET;
+    window.history.replaceState(null, "", `#${id}`);
+    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+  };
 
   return (
     <footer className="overflow-hidden relative bg-gray-950 border-t border-gray-800/60">
@@ -33,9 +42,9 @@ const Footer = () => {
         />
       </div>
 
-      <div className="container relative z-10 px-6 py-16 mx-auto max-w-7xl">
+      <div className="container relative z-10 px-4 sm:px-6 py-12 sm:py-16 mx-auto max-w-7xl">
         {/* Main Footer Content */}
-        <div className="grid gap-12 mb-12 lg:grid-cols-12">
+        <div className="grid gap-10 sm:gap-12 mb-10 sm:mb-12 lg:grid-cols-12">
           {/* Brand Section */}
           <motion.div
             className="lg:col-span-5"
@@ -43,8 +52,8 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <img src={Images.logo_white} alt="SysUp360" className="mb-6 w-40" />
-            <p className="mb-6 text-base leading-relaxed text-gray-400">
+            <img src={Images.logo_white} alt="SysUp360" className="mb-5 sm:mb-6 w-32 sm:w-40" />
+            <p className="mb-5 sm:mb-6 text-sm sm:text-base leading-relaxed text-gray-400">
               Delivering secure, tailored IT solutions that drive real impact. From call centers to cloud infrastructure, we keep your business ahead of the curve.
             </p>
             
@@ -81,6 +90,10 @@ const Footer = () => {
                 <li key={link.label}>
                   <a
                     href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(link.href.replace("#", ""));
+                    }}
                     className="text-gray-400 transition-colors hover:text-[#F47D11] flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 rounded-full bg-gray-600 group-hover:bg-[#F47D11] transition-colors" />
@@ -122,7 +135,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 mt-8 border-t border-gray-800/60">
+        <div className="pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-gray-800/60">
           <div className="flex flex-col gap-4 items-center justify-between md:flex-row">
             <p className="text-sm text-gray-500">
               &copy; {new Date().getFullYear()} SysUp360 Solutions. All rights reserved.

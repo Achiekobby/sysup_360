@@ -10,15 +10,15 @@ const AnimatedHeroImage = () => {
     <div
       ref={containerRef}
       className="relative w-full h-full flex items-center justify-center"
-      style={{ minHeight: '700px' }}
+      style={{ minHeight: 'clamp(180px, 30vh, 460px)' }}
     >
       {/* Main Image Container - Isolated for Earth component */}
       <div
         ref={imageRef}
-        className="relative"
+        className="relative w-full max-w-[320px] sm:max-w-[520px] md:max-w-[640px] lg:max-w-[760px]"
       >
         {/* Glow effect behind image */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#F47D11]/20 to-[#F4733A]/20 blur-3xl rounded-full scale-110" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#F47D11]/20 to-[#F4733A]/20 blur-2xl rounded-full scale-105" />
         
         {/* Main Image with effects */}
         <div className="relative">
@@ -38,7 +38,7 @@ const AnimatedHeroImage = () => {
           
           {/* Floating elements - moved outside Earth container to avoid interference */}
           <motion.div
-            className="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[#F47D11] to-[#F4733A] rounded-2xl opacity-80 blur-sm pointer-events-none"
+            className="hidden sm:block absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-[#F47D11] to-[#F4733A] rounded-2xl opacity-80 blur-sm pointer-events-none"
             style={{ willChange: 'transform', zIndex: 1 }}
             animate={{
               y: [0, -20, 0],
@@ -52,7 +52,7 @@ const AnimatedHeroImage = () => {
           />
           
           <motion.div
-            className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#F4733A] to-[#F47D11] rounded-full opacity-60 blur-md pointer-events-none"
+            className="hidden sm:block absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-tr from-[#F4733A] to-[#F47D11] rounded-full opacity-60 blur-md pointer-events-none"
             style={{ willChange: 'transform', zIndex: 1 }}
             animate={{
               y: [0, 20, 0],

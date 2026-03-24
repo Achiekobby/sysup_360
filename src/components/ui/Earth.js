@@ -36,9 +36,9 @@ const Earth = ({
     const container = canvasRef.current.parentElement;
     if (container) {
       const rect = container.getBoundingClientRect();
-      return Math.max(rect.width, rect.height, 500) || 800;
+      return Math.max(Math.min(rect.width, rect.height), 220) || 320;
     }
-    return canvasRef.current.offsetWidth || 800;
+    return canvasRef.current.offsetWidth || 320;
   };
 
   useEffect(() => {
@@ -231,10 +231,13 @@ const Earth = ({
     <div
       ref={containerRef}
       className={cn(
-        'flex items-center justify-center z-10 w-full max-w-[900px] mx-auto relative',
+        'flex items-center justify-center z-10 w-full max-w-[300px] sm:max-w-[420px] md:max-w-[560px] lg:max-w-[700px] xl:max-w-[820px] mx-auto relative',
         className
       )}
-      style={{ minWidth: '500px', minHeight: '500px' }}
+      style={{
+        width: 'clamp(180px, 62vw, 820px)',
+        height: 'clamp(180px, 62vw, 820px)',
+      }}
     >
       {isMounted ? (
         <>
@@ -243,19 +246,17 @@ const Earth = ({
             style={{
               width: '100%',
               height: '100%',
-              maxWidth: '900px',
-              maxHeight: '900px',
+              maxWidth: '820px',
+              maxHeight: '820px',
               aspectRatio: '1',
               display: 'block',
-              minWidth: '500px',
-              minHeight: '500px',
             }}
           />
           
           {/* Ghana Pin Label - positioned dynamically on globe */}
           {ghanaPosition.visible && (
             <div
-              className="absolute pointer-events-none z-30 transition-opacity duration-300"
+              className="absolute hidden sm:block pointer-events-none z-30 transition-opacity duration-300"
               style={{
                 left: `${ghanaPosition.x}px`,
                 top: `${ghanaPosition.y}px`,
@@ -310,11 +311,9 @@ const Earth = ({
           style={{ 
             width: '100%', 
             height: '100%', 
-            maxWidth: '900px', 
-            maxHeight: '900px',
+            maxWidth: '820px', 
+            maxHeight: '820px',
             aspectRatio: '1',
-            minWidth: '500px',
-            minHeight: '500px',
           }}
         />
       )}

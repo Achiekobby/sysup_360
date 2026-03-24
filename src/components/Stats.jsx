@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,17 +10,6 @@ const neon = {
   a: '#F47D11',
   b: '#F4733A',
 };
-
-function useScanHeight(defaultHeight = 900) {
-  const [scanHeight, setScanHeight] = useState(defaultHeight);
-  useEffect(() => {
-    const update = () => setScanHeight(window.innerHeight || defaultHeight);
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, [defaultHeight]);
-  return scanHeight;
-}
 
 // Full-width bar chart for telemetry cards
 const TelemetryBarChart = ({ points = [6, 10, 8, 12, 9, 14, 13] }) => {
@@ -408,8 +397,6 @@ const ParallaxTechElements = () => {
 
 const Stats = () => {
   const sectionRef = useRef(null);
-  const scanHeight = useScanHeight(900);
-
   const stats = useMemo(
     () => [
       {
@@ -460,7 +447,7 @@ const Stats = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-28 px-6 overflow-hidden"
+      className="relative py-16 sm:py-20 lg:py-28 px-4 sm:px-6 overflow-hidden"
       style={{
         background: 'linear-gradient(135deg, #070707 0%, #14142c 55%, #0b1324 100%)',
       }}
@@ -468,32 +455,14 @@ const Stats = () => {
       {/* Mission Control backdrop */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.03)_1px,transparent_1px)] bg-[size:70px_70px]" />
-        <motion.div
-          className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F47D11]/45 to-transparent"
-          animate={{ y: [0, scanHeight] }}
-          transition={{ duration: 5.4, repeat: Infinity, ease: 'linear' }}
+        <div
+          className="hidden sm:block absolute -top-24 -right-24 w-[560px] h-[560px] rounded-full blur-3xl opacity-40"
+          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.18), transparent 60%)' }}
         />
-        <motion.div
-          className="absolute -top-24 -right-24 w-[560px] h-[560px] rounded-full blur-3xl opacity-55"
-          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.22), transparent 60%)' }}
-          animate={{ y: [0, 34, 0], x: [0, 22, 0] }}
-          transition={{ duration: 6.2, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className="hidden sm:block absolute -bottom-28 -left-28 w-[620px] h-[620px] rounded-full blur-3xl opacity-35"
+          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.16), transparent 60%)' }}
         />
-        <motion.div
-          className="absolute -bottom-28 -left-28 w-[620px] h-[620px] rounded-full blur-3xl opacity-50"
-          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.20), transparent 60%)' }}
-          animate={{ y: [0, -40, 0], x: [0, -26, 0] }}
-          transition={{ duration: 7.1, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        {[...Array(24)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-[#F47D11] rounded-full"
-            style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-            animate={{ y: [0, -26, 0], opacity: [0, 1, 0] }}
-            transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }}
-          />
-        ))}
       </div>
 
       {/* Parallax floating tech elements - scroll reactive */}
@@ -520,7 +489,7 @@ const Stats = () => {
           </p>
         </div>
 
-        <div className="mt-12 space-y-6" data-reveal="stagger">
+        <div className="mt-10 sm:mt-12 space-y-5 sm:space-y-6" data-reveal="stagger">
           {/* Row 1: Left cards | Operational readiness (center) | Right cards */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-6 items-stretch">
             {/* Left column: 2 cards stacked */}

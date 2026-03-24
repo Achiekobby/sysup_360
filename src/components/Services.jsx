@@ -859,6 +859,7 @@ const Services = () => {
   const headerRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
   const [active, setActive] = useState('call-center');
+  const [isMobile, setIsMobile] = useState(false);
 
   const items = useMemo(
     () => [
@@ -968,6 +969,9 @@ const Services = () => {
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return undefined;
+    const updateViewport = () => setIsMobile(window.innerWidth < 640);
+    updateViewport();
+    window.addEventListener('resize', updateViewport);
 
     const ctx = gsap.context(() => {
       const headerEls = headerRef.current?.querySelectorAll('[data-animate="header"]') || [];
@@ -1019,7 +1023,10 @@ const Services = () => {
       }
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      window.removeEventListener('resize', updateViewport);
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -1031,34 +1038,22 @@ const Services = () => {
         background: 'linear-gradient(135deg, #0a0a0a 0%, #16213e 50%, #1a1a2e 100%)',
       }}
     >
-      {/* Enhanced Background */}
+      {/* Background */}
       <div className="absolute inset-0 z-0">
-        {/* Animated gradient orbs */}
-        <motion.div
-          className="absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full blur-3xl opacity-40"
-          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.4), transparent 70%)' }}
-          animate={{
-            x: [0, 50, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+        {/* Static gradient orbs */}
+        <div
+          className="hidden sm:block absolute top-1/4 right-1/4 w-[600px] h-[600px] rounded-full blur-3xl opacity-30"
+          style={{ background: 'radial-gradient(circle, rgba(244,125,17,0.35), transparent 70%)' }}
         />
-        <motion.div
-          className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-40"
-          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.35), transparent 70%)' }}
-          animate={{
-            x: [0, -40, 0],
-            y: [0, 40, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className="hidden sm:block absolute bottom-1/4 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-30"
+          style={{ background: 'radial-gradient(circle, rgba(244,115,58,0.3), transparent 70%)' }}
         />
 
         {/* Faded glassmorphism + spinning 360 logo with scroll movement (like Features) */}
         <div
           data-bg-wrap="logo"
-          className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none"
+          className="hidden lg:flex absolute inset-0 items-center justify-center overflow-hidden pointer-events-none"
         >
           <div className="absolute w-[900px] h-[900px] rounded-full backdrop-blur-2xl bg-gray-900/50 -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" aria-hidden="true" />
           <img
@@ -1073,39 +1068,11 @@ const Services = () => {
         {/* Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(244,125,17,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(244,125,17,.02)_1px,transparent_1px)] bg-[size:80px_80px]" />
         
-        {/* Scan line */}
-        <motion.div
-          className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#F47D11]/50 to-transparent shadow-[0_0_20px_rgba(244,125,17,0.6)]"
-          animate={{ y: [0, 1000] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
-        />
-
-        {/* Floating particles */}
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-[#F47D11] rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0, 0.8, 0],
-              scale: [0.5, 1.5, 0.5],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 3,
-            }}
-          />
-        ))}
       </div>
 
-      <div className="container relative z-10 px-6 py-16 mx-auto sm:py-24">
+      <div className="container relative z-10 px-4 sm:px-6 py-14 sm:py-16 md:py-20 lg:py-24 mx-auto">
         {/* Header */}
-        <div ref={headerRef} className="mx-auto mb-16 max-w-4xl text-center sm:mb-20">
+        <div ref={headerRef} className="mx-auto mb-12 max-w-4xl text-center sm:mb-20">
           {/* <motion.div
             data-animate="header"
             className="inline-flex items-center gap-3 bg-gradient-to-r from-[#F47D11]/15 to-[#F4733A]/15 backdrop-blur-md px-6 py-3 rounded-full border border-[#F47D11]/30 mb-6"
@@ -1120,7 +1087,7 @@ const Services = () => {
 
           <h2
             data-animate="header"
-            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight mb-5 sm:mb-6"
           >
             <span className="block">What We</span>
             <span className="block bg-gradient-to-r from-[#F47D11] via-[#F4733A] to-[#F47D11] bg-clip-text text-transparent mt-2">
@@ -1128,7 +1095,7 @@ const Services = () => {
             </span>
           </h2>
 
-          <p data-animate="header" className="mx-auto max-w-3xl text-lg leading-relaxed text-gray-300 sm:text-xl">
+          <p data-animate="header" className="mx-auto max-w-3xl text-base leading-relaxed text-gray-300 sm:text-xl">
             From infrastructure to innovation — explore our complete portfolio of IT solutions designed to transform how your business operates and grows.
           </p>
         </div>
@@ -1277,7 +1244,7 @@ const Services = () => {
                       {/* Custom Animated Illustration */}
                       <motion.div
                         className="relative overflow-hidden rounded-xl border border-[#F47D11]/20 bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-12 sm:p-16"
-                        style={{ minHeight: '300px' }}
+                        style={{ minHeight: isMobile ? '220px' : '300px' }}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
