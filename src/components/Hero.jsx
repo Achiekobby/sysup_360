@@ -240,7 +240,7 @@ const Hero = () => {
 
       {/* Main Content */}
       <motion.div
-        className="relative z-20 px-4 pt-0 pb-8 mx-auto w-full max-w-8xl sm:px-6 lg:px-12 sm:pt-2 sm:pb-12 lg:pt-4 lg:pb-16"
+        className="relative z-20 px-4 pt-4 pb-8 mx-auto w-full max-w-8xl sm:px-6 lg:px-12 sm:pt-6 sm:pb-12 lg:pt-4 lg:pb-16"
         style={{
           opacity: opacity,
           scale: scale,
@@ -250,7 +250,7 @@ const Hero = () => {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start lg:items-center min-h-0 lg:min-h-[75vh]">
           {/* Left Content */}
-          <div className="relative z-30 -mt-4 space-y-4 text-center lg:text-left sm:-mt-6 sm:space-y-5 lg:-mt-24 lg:space-y-6">
+          <div className="relative z-30 mt-0 space-y-4 text-center lg:text-left sm:-mt-2 sm:space-y-5 lg:-mt-24 lg:space-y-6">
             {/* Title */}
             <div ref={titleRef} className="space-y-1 sm:space-y-2" data-reveal="tilt">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.1] sm:leading-[1.15]">
@@ -321,16 +321,24 @@ const Hero = () => {
                     happen
                   </span>
                 </div>
-                <div className="flex flex-col gap-1 justify-center items-start mt-3 text-2xl font-light title-line text-white/90 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:mt-4 lg:mt-5 lg:justify-start sm:gap-2">
+                <div className="flex flex-col gap-1 justify-center items-center mt-3 text-white title-line sm:mt-4 lg:mt-5 lg:justify-start lg:items-start sm:gap-2">
                   <span className="whitespace-nowrap shrink-0">
-                    with our 360
+                    with our{" "}
+                    <span
+                      className="relative z-10 font-black"
+                      style={{
+                        background: "linear-gradient(135deg, #F47D11 0%, #FF9500 50%, #F4733A 100%)",
+                        backgroundClip: "text",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        filter: "drop-shadow(0 0 8px rgba(244, 125, 17, 0.6))",
+                      }}
+                    >
+                      360
+                    </span>
                     <motion.span
                       className="inline-flex items-baseline ml-0.5 font-bold"
-                      style={{
-                        color: "#D85F08",
-                        fontSize: "1.35em",
-                        filter: "drop-shadow(0 0 6px rgba(216, 95, 8, 0.6))",
-                      }}
+                      style={{ color: "#F47D11", filter: "drop-shadow(0 0 6px rgba(244, 125, 17, 0.6))" }}
                       aria-hidden
                     >
                       {[0, 1, 2].map((i) => (
@@ -351,9 +359,9 @@ const Hero = () => {
                       ))}
                     </motion.span>
                   </span>
-                  <span className="relative inline-block min-w-[180px] sm:min-w-[320px] md:min-w-[400px] lg:min-w-[500px] text-left h-[1.2em] overflow-visible whitespace-nowrap">
+                  <span className="relative block min-w-[180px] sm:min-w-[320px] md:min-w-[400px] lg:min-w-[500px] text-center lg:text-left h-[1.2em] overflow-visible whitespace-nowrap">
                     <motion.span
-                      className="inline-block relative z-30 font-bold tracking-wide uppercase"
+                      className="block relative z-30 font-bold tracking-wide text-center uppercase lg:text-left"
                       animate={{
                         scale: isTyping ? [1, 1.03, 1] : 1,
                       }}
@@ -475,7 +483,7 @@ const Hero = () => {
 
       {/* Scroll Indicator - optimized */}
       <motion.div
-        className="hidden sm:block absolute bottom-10 left-1/2 z-20 transform -translate-x-1/2"
+        className="hidden absolute bottom-10 left-1/2 z-20 transform -translate-x-1/2 sm:block"
         style={{ willChange: 'transform, opacity' }}
         animate={{ y: [0, 15, 0] }}
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
