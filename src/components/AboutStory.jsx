@@ -132,7 +132,9 @@ const AboutStory = () => {
           {/* Our Story - Enhanced 3D Card */}
           <motion.div
             ref={storyCardRef}
-            className="overflow-hidden relative z-10 p-5 rounded-2xl sm:rounded-3xl border backdrop-blur-xl group border-gray-800/60 sm:p-8 lg:p-10"
+            className={`overflow-hidden relative z-10 p-5 rounded-2xl sm:rounded-3xl border backdrop-blur-xl group sm:p-8 lg:p-10 ${
+              isMobile ? 'border-[#F47D11]/45' : 'border-gray-800/60'
+            }`}
             style={{
               background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(26, 26, 46, 0.8) 100%)',
               transformStyle: 'preserve-3d',
@@ -157,7 +159,9 @@ const AboutStory = () => {
           >
             {/* Animated gradient border */}
             <motion.div
-              className="absolute -inset-[1px] rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+              className={`absolute -inset-[1px] rounded-3xl transition-opacity duration-700 ${
+                isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+              }`}
               style={{
                 background: 'linear-gradient(135deg, #F47D11, #FF9500, #F4733A, #F47D11)',
                 backgroundSize: '200% 200%',
@@ -170,7 +174,9 @@ const AboutStory = () => {
 
             {/* Glow effect on hover */}
             <motion.div 
-              className="absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+              className={`absolute inset-0 rounded-3xl transition-opacity duration-700 ${
+                isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+              }`}
               style={{
                 background: 'radial-gradient(circle at 50% 0%, rgba(244,125,17,0.25), transparent 60%), radial-gradient(circle at 100% 100%, rgba(244,115,58,0.2), transparent 60%)',
               }}
@@ -234,8 +240,16 @@ const AboutStory = () => {
               </div>
 
               {/* Decorative corner accent */}
-              <div className="absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-[#F47D11]/20 rounded-tr-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-[#F4733A]/20 rounded-bl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div
+                className={`absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-[#F47D11]/20 rounded-tr-2xl transition-opacity duration-500 ${
+                  isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}
+              />
+              <div
+                className={`absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-[#F4733A]/20 rounded-bl-2xl transition-opacity duration-500 ${
+                  isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}
+              />
             </div>
           </motion.div>
 
@@ -354,7 +368,9 @@ const AboutStory = () => {
           {/* Mission & Vision - Enhanced 3D Card */}
           <motion.div
             ref={missionCardRef}
-            className="overflow-hidden relative z-10 p-5 rounded-2xl sm:rounded-3xl border backdrop-blur-xl group border-gray-800/60 sm:p-8 lg:p-10"
+            className={`overflow-hidden relative z-10 p-5 rounded-2xl sm:rounded-3xl border backdrop-blur-xl group sm:p-8 lg:p-10 ${
+              isMobile ? 'border-[#F4733A]/45' : 'border-gray-800/60'
+            }`}
             style={{
               background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.8) 0%, rgba(26, 26, 46, 0.8) 100%)',
               transformStyle: 'preserve-3d',
@@ -379,7 +395,9 @@ const AboutStory = () => {
           >
             {/* Animated gradient border */}
             <motion.div
-              className="absolute -inset-[1px] rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+              className={`absolute -inset-[1px] rounded-3xl transition-opacity duration-700 ${
+                isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+              }`}
               style={{
                 background: 'linear-gradient(135deg, #F4733A, #FF9500, #F47D11, #F4733A)',
                 backgroundSize: '200% 200%',
@@ -392,7 +410,9 @@ const AboutStory = () => {
 
             {/* Glow effect on hover */}
             <motion.div 
-              className="absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+              className={`absolute inset-0 rounded-3xl transition-opacity duration-700 ${
+                isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+              }`}
               style={{
                 background: 'radial-gradient(circle at 0% 0%, rgba(244,115,58,0.25), transparent 60%), radial-gradient(circle at 100% 100%, rgba(244,125,17,0.2), transparent 60%)',
               }}
@@ -443,8 +463,16 @@ const AboutStory = () => {
               <div className="mt-6 h-px bg-gradient-to-r from-[#F47D11]/50 via-transparent to-transparent" />
 
               {/* Decorative corner accent */}
-              <div className="absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-[#F4733A]/20 rounded-tr-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-[#F47D11]/20 rounded-bl-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div
+                className={`absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-[#F4733A]/20 rounded-tr-2xl transition-opacity duration-500 ${
+                  isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}
+              />
+              <div
+                className={`absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-[#F47D11]/20 rounded-bl-2xl transition-opacity duration-500 ${
+                  isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}
+              />
             </div>
           </motion.div>
         </div>

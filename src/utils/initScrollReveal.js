@@ -80,58 +80,107 @@ function animateInStagger(container) {
   });
 }
 
+/** Force-reveal any element that is still hidden — safety net for missed triggers. */
+function forceRevealStuck(rootEl) {
+  rootEl.querySelectorAll('[data-reveal]').forEach((el) => {
+    const s = window.getComputedStyle(el);
+    if (parseFloat(s.opacity) < 0.1 || s.visibility === 'hidden') {
+      gsap.set(el, { clearProps: 'all' });
+    }
+    el.querySelectorAll('[data-reveal-child]').forEach((child) => {
+      const cs = window.getComputedStyle(child);
+      if (parseFloat(cs.opacity) < 0.1 || cs.visibility === 'hidden') {
+        gsap.set(child, { clearProps: 'all' });
+      }
+    });
+  });
+}
+
 /**
  * Initializes an advanced, batched scroll reveal system.
  * Usage: const cleanup = initScrollReveal(rootEl); cleanup();
  */
 export function initScrollReveal(rootEl = document.body) {
   if (prefersReducedMotion()) {
-    // Keep content visible; no reveal animations.
+    // Skip animations — keep everything visible.
     return () => {};
   }
 
   const ctx = gsap.context(() => {
     const elements = gsap.utils.toArray(rootEl.querySelectorAll('[data-reveal]'));
 
-    // 1) Pre-set initial states (prevents popping)
+    // 1) Pre-set initial states
     elements.forEach((el) => {
       const type = el.getAttribute('data-reveal');
       if (type === 'stagger') setInitialStagger(el);
       else setInitial(el, type);
     });
 
-    // 2) Stagger containers (run once; no reverse)
+    // 2) Immediately reveal elements already in the viewport (no scroll needed)
+    elements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.95) {
+        const type = el.getAttribute('data-reveal');
+        if (type === 'stagger') {
+          animateInStagger(el);
+        } else {
+          animateIn([el], type);
+        }
+      }
+    });
+
+    // 3) Stagger containers — watch for remaining off-screen ones
     elements
-      .filter((el) => el.getAttribute('data-reveal') === 'stagger')
+      .filter((el) => {
+        const rect = el.getBoundingClientRect();
+        return el.getAttribute('data-reveal') === 'stagger' && rect.top >= window.innerHeight * 0.95;
+      })
       .forEach((container) => {
         ScrollTrigger.create({
           trigger: container,
-          start: 'top 85%',
+          start: 'top 92%',
           once: true,
+          invalidateOnRefresh: true,
           onEnter: () => animateInStagger(container),
         });
       });
 
-    // 3) Batch per type for consistent motion
+    // 4) Batch per type for off-screen elements
     const types = Object.keys(PRESETS);
     types.forEach((type) => {
-      const group = elements.filter((el) => el.getAttribute('data-reveal') === type);
+      const group = elements.filter((el) => {
+        if (el.getAttribute('data-reveal') !== type) return false;
+        const rect = el.getBoundingClientRect();
+        return rect.top >= window.innerHeight * 0.95;
+      });
       if (!group.length) return;
 
       ScrollTrigger.batch(group, {
-        start: 'top 85%',
+        start: 'top 92%',
         once: true,
         interval: 0.12,
         batchMax: 10,
+        invalidateOnRefresh: true,
         onEnter: (batch) => animateIn(batch, type),
       });
     });
 
-    // Ensure correct trigger positions
     ScrollTrigger.refresh();
   }, rootEl);
 
-  return () => ctx.revert();
+  // Layer 2: re-refresh after layout settles (fonts, images, dynamic heights)
+  const refreshTimer = setTimeout(() => {
+    ScrollTrigger.refresh();
+  }, 400);
+
+  // Layer 3: hard fallback — if anything is still hidden after 2.5s, force it visible
+  const fallbackTimer = setTimeout(() => {
+    forceRevealStuck(rootEl);
+  }, 2500);
+
+  return () => {
+    clearTimeout(refreshTimer);
+    clearTimeout(fallbackTimer);
+    ctx.revert();
+  };
 }
-
-

@@ -5,6 +5,7 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  background-color: #0a0a0a;
 }
 
 /* Custom scrollbar */
@@ -25,13 +26,14 @@ html {
   background: linear-gradient(180deg, #F4733A, #F47D11);
 }
 
-/* Smooth transitions for all elements */
-* {
+/* Smooth transitions for interactive elements only (not all — avoids GSAP flicker) */
+a, button, input, select, textarea {
   transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 /* Improved text rendering */
 body {
+  background-color: #0a0a0a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -351,26 +353,6 @@ body {
 
 .animate-fade-in-up {
   animation: fadeInUp 0.5s ease-out forwards;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #d1d1d1;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #FF6C6C;
 }
 
 /* Focus styles for accessibility */
